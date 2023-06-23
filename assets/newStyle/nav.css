@@ -1,0 +1,127 @@
+@import './base.css';
+
+.new-nav,
+.new-nav-mobile{
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-top: 8rem;
+  width: 15vw;
+}
+.new-nav-mobile{
+  z-index: 7;
+}
+.new-nav ul,
+.new-nav-mobile ul{
+  list-style: none;
+  padding-inline-start: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+.new-nav-mobile ul{
+  width: 100%;
+}
+.new-nav ul li,
+.new-nav ul li a,
+.new-nav-mobile ul li,
+.new-nav-mobile ul li a{
+  display: flex;
+  gap: 1rem;
+}
+.new-nav ul li{
+  background: var(--color1-light5);
+  transition: all .5s ease;
+  padding: 0 2rem;
+}
+.new-nav-mobile ul li{
+  padding: 1rem 2rem;
+}
+.new-nav ul li:hover{
+  background: var(--color1-light4);
+}
+.new-nav ul li a,
+.new-nav-mobile ul li a{
+  padding: 10px;
+  text-decoration: none;
+  color: currentColor;
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+.new-nav-mobile ul li a{
+  justify-content: center;
+}
+.new-nav ul li a object,
+.new-nav-mobile ul li a object{
+  max-height: 2rem;
+  max-width: 2rem;
+}
+.new-nav-active{
+  background: var(--color1) !important;
+  color: white;
+}
+
+.new-navbar{
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  background: white;
+  box-shadow: 0px 0px 30px -15px var(--color1-light4);
+  display: flex;
+  width: 100%;
+  padding: 1.5rem 3rem;
+}
+.new-navbar main{
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+.new-navbar .nav-logo{
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+.new-navbar object{
+  max-height: 2rem;
+  max-width: 2rem;
+}
+.new-navbar button{
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.new-navbar .s2-right{
+  display: flex;
+  gap: 3rem;
+  align-items: center;
+}
+.new-navbar .btn-menu{
+  display: flex;
+  gap: 2px;
+  transform: rotate(90deg);
+  height: 3rem;
+  width: 3rem;
+  align-items: center;
+  justify-content: center;
+  padding: 7px;
+}
+.new-navbar .btn-menu div{
+  height: 100%;
+  width: 2px;
+  background: black;
+}
+
+@media (max-width: 990px) {
+  .new-nav{
+    display: none;
+  }
+}
+@media (min-width: 991px){
+  .new-navbar .s2-right object{
+    display: none;
+  }
+}

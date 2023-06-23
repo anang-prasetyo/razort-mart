@@ -1,0 +1,35 @@
+@import './base.css';
+
+.min-dashboard{
+  display: flex;
+  min-width: 100%;
+  min-height: 99vh;
+  align-items: center;
+  justify-content: center;
+}
+.min-dashboard .md-intro{
+  margin-bottom: 2rem;
+}
+.min-dashboard .md-title{
+  font-size: 3rem;
+  font-weight: 600;
+}
+.min-dashboard .md-desc{
+  color: var(--color-grey3);
+}
+.min-dashboard section{
+  max-width: 75%;
+}
+
+@media (max-width: 990px) {
+  .min-dashboard{
+    text-align: center;
+    padding: 0 3rem;
+  }
+  .min-dashboard section{
+    max-width: 100%;
+  }
+}
+@media (min-width: 991px){
+  
+}

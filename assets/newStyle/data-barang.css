@@ -1,0 +1,45 @@
+@import './base.css';
+
+.data-barang,
+.edit,
+.dashboard{
+  padding: 8rem 0 2rem 0;
+}
+.data-barang a{
+  text-decoration: none;
+}
+.data-barang main{
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+.data-barang .s2{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  gap: 2rem;
+}
+.data-barang .s2 form{
+  position: relative;
+  width: 50%;
+}
+.data-barang .s2 form object{
+  position: absolute;
+  top: 50%;
+  left: 2%;
+  transform: translateY(-50%);
+}
+.data-barang .s2 form input,
+.data-barang .s2 form select{
+  padding-left: 4rem;
+}
+.data-barang object{
+  max-height: 2rem;
+  max-width: 2rem;
+  cursor: pointer;
+}
+.data-barang button{
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
