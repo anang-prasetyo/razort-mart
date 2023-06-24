@@ -19,7 +19,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 		<hr>
 		<section class="my-5">
 			<div class="d-flex gap-2 gap-md-4 justify-content-center align-content-center">
-				<button id="btnMobile" data-toggle="modal" data-target="#myModal" class="d-inline-flex d-md-none buttonku-1-primary align-items-center"><i class="bi-plus"></i></button>
+				<button id="btnMobile" data-bs-toggle="modal" data-bs-target="#myModal" class="d-inline-flex d-md-none buttonku-1-primary align-items-center"><i class="bi-plus"></i></button>
 				<button id="btnDesktop" data-bs-toggle="modal" data-bs-target="#myModal" class="d-none d-md-inline-flex buttonku-1-primary align-items-center gap-2"><i class="bi-plus"></i> Tambah Entry Penjualan</button>
 				<form action="" method="get" class="position-relative">
 					<select type="submit" name="tanggal" class="form-control ps-5 pe-4" onchange="this.form.submit()">

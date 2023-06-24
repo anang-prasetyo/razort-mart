@@ -28,7 +28,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 		<hr>
 		<section class="my-5">
 			<div class="d-flex gap-2 gap-md-4 justify-content-center align-content-center">
-				<button id="btnMobile" data-toggle="modal" data-target="#myModal" class="d-inline-flex d-md-none buttonku-1-primary"><i class="bi-plus"></i></button>
+				<button id="btnMobile" data-bs-toggle="modal" data-bs-target="#myModal" class="d-inline-flex d-md-none buttonku-1-primary"><i class="bi-plus"></i></button>
 				<button id="btnDesktop" data-bs-toggle="modal" data-bs-target="#myModal" class="d-none d-md-inline-flex buttonku-1-primary gap-2"><i class="bi-plus"></i> Tambah Barang</button>
 				<form action="cari_act.php" method="get" class="position-relative">
 					<input type="text" class="form-control ps-5" placeholder="Cari barang di sini .." autocomplete='off' aria-describedby="basic-addon1" name="cari">
@@ -39,6 +39,50 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 			</div>
 		</section>
 		
+		<div>
+			<!-- <label>nama barang</label>
+			<form action="barang.php" method="post">
+				<input type="text" name="cek" id="cek">
+				<input type="submit" value="cek" onclick="foo()">
+			</form>
+			<div>hasil : <span id="hasil"></span></div>
+			<div id="demo"></div>
+			<?php
+			if(isset($_POST['cek'])){
+				include 'config.php';
+				$koneksi = mysqli_connect('localhost','root','','projectweb');
+				$cek1 = $_POST['cek'];
+				mysqli_query($koneksi, "insert into cache_barang values('','$cek1', '', '', 0, 0, 0)");
+				// $kirim = mysqli_query($koneksi, "insert into cache_barang values('','$nama','$jenis','$suplier','$modal','$harga','$jumlah','$sisa')");
+				$query=mysqli_query($koneksi, "select * from barang where nama like '$cek1%' or jenis like '$cek1%' order by nama");
+				$cb = mysqli_fetch_array($query);
+				$cek2 = mysqli_num_rows($query);
+				if($cek2 > 0){
+					echo '
+					<div class="text-danger">Sudah ada data dengan nama ini</div>
+					<button type="button" class="btn btn-primary" disabled>Kirim</button>';
+				}else{
+					echo '
+					<div class="text-success">Belum ada data dengan nama ini, silahkan Kirim</div>
+					<button type="button" class="btn btn-primary">Kirim</button>';
+					$no=1;
+					while($cb){
+
+						?>
+						<div>
+							<div><?php echo $no++ ?></div>
+							<div><?php echo $cb['nama_barang'] ?></div>
+						</div>
+						<?php 
+					}
+				}
+			}else{
+				echo '
+				<div class="text-warning">Silahkan cek data sebelum mengirim data</div>
+				<button type="button" class="btn btn-primary" disabled>Kirim</button>';
+			}
+			?> -->
+		</div>
 		<section>
 			<div class="s3" style="overflow: auto;">
 				<?php 
@@ -177,36 +221,174 @@ while($q=mysqli_fetch_array($periksa)){
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-			<form action="tmb_brg_act1.php" method="post" class="d-flex flex-column gap-2">
+			<form name="formBarang" action="barang.php" method="post" class="d-flex flex-column gap-2">
 				<div class="form-group">
 					<label>Nama Barang</label>
-					<input name="nama" type="text" class="form-control" placeholder="Nama Barang .." onkeyup="this.value = this.value.toUpperCase()" required>
+					<input name="namaBarang" id="namaBarang" type="text" class="form-control" placeholder="Nama Barang .." onkeyup="this.value = this.value.toUpperCase()" required>
 				</div>
 				<div class="form-group">
 					<label>Jenis</label>
-					<input name="jenis" type="text" class="form-control" placeholder="Jenis Barang .." onkeyup="this.value = this.value.toUpperCase()" required>
+					<input name="jenisBarang" id="jenisBarang" type="text" class="form-control" placeholder="Jenis Barang .." onkeyup="this.value = this.value.toUpperCase()" required>
 				</div>
 				<div class="form-group">
 					<label>Suplier</label>
-					<input name="suplier" type="text" class="form-control" placeholder="Suplier .." onkeyup="this.value = this.value.toUpperCase()" required>
+					<input name="suplier" id="suplier" type="text" class="form-control" placeholder="Suplier .." onkeyup="this.value = this.value.toUpperCase()" required>
 				</div>
 				<div class="form-group">
 					<label>Harga Modal</label>
-					<input name="modal" type="number" min="0" class="form-control" placeholder="Modal per unit">
+					<input name="hargaModal" id="hargaModal" type="number" min="0" class="form-control" placeholder="Modal per unit">
 				</div>	
 				<div class="form-group">
 					<label>Harga Jual</label>
-					<input name="harga" type="number" min="0" class="form-control" placeholder="Harga Jual per unit">
+					<input name="hargaJual" id="hargaJual" type="number" min="0" class="form-control" placeholder="Harga Jual per unit">
 				</div>	
 				<div class="form-group">
 					<label>Jumlah</label>
-					<input name="jumlah" type="number" min="0" class="form-control" placeholder="Jumlah">
+					<input name="jumlah" id="jumlah" type="number" min="0" class="form-control" placeholder="Jumlah">
 				</div>																	
-
 			</div>
-			<div class="modal-footer">
-				<input type="reset" class="buttonku-1" value="Reset">
-				<input type="submit" class="buttonku-1-primary" value="Tambah Barang">
+			<div class="">
+				<?php
+				if(isset($_POST['namaBarang'])){
+					include 'config.php';
+					$namaBarang = $_POST['namaBarang'];
+					$koneksi = mysqli_connect('localhost','root','','projectweb');
+
+					$query = mysqli_query($koneksi, "select * from barang where nama like '$namaBarang%' or jenis like '$namaBarang%' order by nama");
+					$cek2 = mysqli_num_rows($query);
+					if($cek2 > 0){
+						echo '
+						<script>
+						$(document).ready(function(){
+							$("#myModal").modal("show");
+							retriveData()
+						});
+						</script>
+						<div class="px-3 text-danger">Sudah ada data barang dengan nama ini, silahkan periksa kembali data anda.</div>
+						<div class="modal-footer">
+							<input type="reset" class="buttonku-1" value="Reset">
+							<input type="submit" value="Cek Data" name="cek_data" class="btn btn-dark" onclick="cekData()">
+						</div>
+						';
+					}else{
+						echo '
+						<script>
+						$(document).ready(function(){
+							if (localStorage.getItem("namaBarang").length !== 0){
+								$("#myModal").modal("show");
+								retriveData()
+							}
+							else{
+								$("#myModal").modal("hide");
+							}
+						});
+						</script>
+						<div class="px-3 text-success">Belum ada data dengan nama ini, silahkan klik Tambah Barang</div>
+						<div class="modal-footer">
+							<input type="reset" class="buttonku-1" value="Reset">
+							<input type="submit" name="submit" value="Tambah Barang" class="btn btn-primary">
+						</div>
+						';
+						if(isset($_POST['submit'])){
+							$jenisBarang = $_POST['jenisBarang'];
+							$suplier=$_POST['suplier'];
+							$hargaModal=$_POST['hargaModal'];
+							$hargaJual=$_POST['hargaJual'];
+							$jumlah=$_POST['jumlah'];
+							$sisa=$_POST['jumlah'];
+							mysqli_query($koneksi, "insert into barang values('','$namaBarang','$jenisBarang','$suplier','$hargaModal','$hargaJual','$jumlah','$sisa')");
+							global $namaBarang;
+							unset($namaBarang);
+							$namaBarang = null;
+							echo '
+							<script>
+								$("#myModal").modal("hide");
+								localStorage.removeItem("namaBarang");
+								localStorage.removeItem("jenisBarang");
+								localStorage.removeItem("suplier");
+								localStorage.removeItem("hargaModal");
+								localStorage.removeItem("hargaJual");
+								localStorage.removeItem("jumlah");
+								location.load(true);
+							</script>
+							';
+						}
+					}
+				}
+				else{
+					echo '
+					<div class="px-3 text-warning">Silahkan cek data sebelum mengirim data</div>
+					<div class="modal-footer">
+						<input type="reset" class="buttonku-1" value="Reset">
+						<button class="btn btn-dark" onclick="cekData()">Cek Data</button>
+					</div>
+					';
+				}
+				?>
+				
+			
+			<script>
+				let cacheBarang = {
+					namaBarang: '',
+					jenisBarang: '',
+					suplier: '',
+					hargaModal: 0,
+					hargaJual: 0,
+					jumlah: 0
+				};
+				function cekData() {
+					let getInputBarang = {
+						namaBarang: document.getElementById("namaBarang").value,
+						jenisBarang: document.getElementById("jenisBarang").value,
+						suplier: document.getElementById("suplier").value,
+						hargaModal: document.getElementById("hargaModal").value,
+						hargaJual: document.getElementById("hargaJual").value,
+						jumlah: document.getElementById("jumlah").value
+					}
+					localStorage.setItem("namaBarang", getInputBarang.namaBarang);
+					localStorage.setItem("jenisBarang", getInputBarang.jenisBarang);
+					localStorage.setItem("suplier", getInputBarang.suplier);
+					localStorage.setItem("hargaModal", getInputBarang.hargaModal);
+					localStorage.setItem("hargaJual", getInputBarang.hargaJual);
+					localStorage.setItem("jumlah", getInputBarang.jumlah);
+					
+					cacheBarang.namaBarang = localStorage.getItem("namaBarang");
+					cacheBarang.jenisBarang = localStorage.getItem("jenisBarang");
+					cacheBarang.suplier = localStorage.getItem("suplier");
+					cacheBarang.hargaModal = localStorage.getItem("hargaModal");
+					cacheBarang.hargaJual = localStorage.getItem("hargaJual");
+					cacheBarang.jumlah = localStorage.getItem("jumlah");
+					
+					document.getElementById("namaBarang").value = cacheBarang.namaBarang;
+					document.getElementById("jenisBarang").value = cacheBarang.jenisBarang;
+					document.getElementById("suplier").value = cacheBarang.suplier;
+					document.getElementById("hargaModal").value = cacheBarang.hargaModal;
+					document.getElementById("hargaJual").value = cacheBarang.hargaJual;
+					document.getElementById("jumlah").value = cacheBarang.jumlah;
+					return true;
+				}
+				function retriveData(){
+					// document.formBarang.namaBarang.value = cacheBarang.namaBarang;
+					document.getElementById("namaBarang").value = localStorage.getItem("namaBarang");
+					document.getElementById("jenisBarang").value = localStorage.getItem("jenisBarang");
+					document.getElementById("suplier").value = localStorage.getItem("suplier");
+					document.getElementById("hargaModal").value = localStorage.getItem("hargaModal");
+					document.getElementById("hargaJual").value = localStorage.getItem("hargaJual");
+					document.getElementById("jumlah").value = localStorage.getItem("jumlah");
+					return true;
+				}
+				if (cacheBarang.namaBarang.length !== 0 && cacheBarang.jenisBarang.length !== 0 && cacheBarang.suplier.length !== 0 && cacheBarang.hargaModal !== 0 && cacheBarang.hargaJual !== 0 && cacheBarang.jumlah !== 0){
+					document.getElementById("namaBarang").value = cacheBarang.namaBarang;
+					document.getElementById("jenisBarang").value = cacheBarang.jenisBarang;
+					document.getElementById("suplier").value = cacheBarang.suplier;
+					document.getElementById("hargaModal").value = cacheBarang.hargaModal;
+					document.getElementById("hargaJual").value = cacheBarang.hargaJual;
+					document.getElementById("jumlah").value = cacheBarang.jumlah;
+				}
+				// $(document).ready(function(){
+				// 	$("#myModal").modal("show");
+				// });
+			</script>
 			</div>
     </div>
   </div>
