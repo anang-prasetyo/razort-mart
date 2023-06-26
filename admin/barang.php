@@ -221,32 +221,54 @@ while($q=mysqli_fetch_array($periksa)){
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-			<form name="formBarang" action="barang.php" method="post" class="d-flex flex-column gap-2">
+			<form name="formBarang" action="barang.php" method="post" class="d-flex flex-column gap-2 needs-validation" novalidate>
+			<!-- <form name="formBarang" action="barang.php" method="post" class="d-flex flex-column gap-2"> -->
+				
 				<div class="form-group">
-					<label>Nama Barang</label>
-					<input name="namaBarang" id="namaBarang" type="text" class="form-control" placeholder="Nama Barang .." onkeyup="this.value = this.value.toUpperCase()" required>
+					<label for="namaBarang" class="form-label">Nama Barang</label>
+					<input name="namaBarang" id="namaBarang" type="text" class="form-control" placeholder="Nama Barang .." onkeyup="this.value = this.value.toUpperCase()" required>
+					<div class="invalid-feedback">Nama Barang belum diisi.</div>
+					<?php
+					if(isset($_POST['namaBarang'])){
+						include 'config.php';
+						$namaBarang = $_POST['namaBarang'];
+						$koneksi = mysqli_connect('localhost','root','','projectweb');
+						$query = mysqli_query($koneksi, "select * from barang where nama like '$namaBarang%' or jenis like '$namaBarang%' order by nama");
+						$cek2 = mysqli_num_rows($query);
+						if($cek2 > 0){
+							echo '
+							<div class="text-danger">Sudah ada data barang dengan nama ini, silahkan periksa kembali data anda.</div>
+							';
+						}
+					}
+					?>
 				</div>
 				<div class="form-group">
-					<label>Jenis</label>
-					<input name="jenisBarang" id="jenisBarang" type="text" class="form-control" placeholder="Jenis Barang .." onkeyup="this.value = this.value.toUpperCase()" required>
+					<label for="jenisBarang" class="form-label">Jenis</label>
+					<input name="jenisBarang" id="jenisBarang" type="text" class="form-control" placeholder="Jenis Barang .." onkeyup="this.value = this.value.toUpperCase()" required>
+					<div class="invalid-feedback">Jenis Barang belum diisi.</div>
 				</div>
 				<div class="form-group">
-					<label>Suplier</label>
-					<input name="suplier" id="suplier" type="text" class="form-control" placeholder="Suplier .." onkeyup="this.value = this.value.toUpperCase()" required>
+					<label for="suplier" class="form-label">Suplier</label>
+					<input name="suplier" id="suplier" type="text" class="form-control" placeholder="Suplier .." onkeyup="this.value = this.value.toUpperCase()" required>
+					<div class="invalid-feedback">Suplier belum diisi.</div>
 				</div>
 				<div class="form-group">
-					<label>Harga Modal</label>
-					<input name="hargaModal" id="hargaModal" type="number" min="0" class="form-control" placeholder="Modal per unit">
-				</div>	
+					<label for="hargaModal" class="form-label">Harga Modal</label>
+					<input name="hargaModal" id="hargaModal" type="number" min="0" class="form-control" placeholder="Modal per unit" required>
+					<div class="invalid-feedback">Harga Modal belum diisi.</div>
+				</div>
 				<div class="form-group">
-					<label>Harga Jual</label>
-					<input name="hargaJual" id="hargaJual" type="number" min="0" class="form-control" placeholder="Harga Jual per unit">
-				</div>	
+					<label for="hargaJual" class="form-label">Harga Jual</label>
+					<input name="hargaJual" id="hargaJual" type="number" min="0" class="form-control" placeholder="Harga Jual per unit" required>
+					<div class="invalid-feedback">Harga Jual belum diisi.</div>
+				</div>
 				<div class="form-group">
-					<label>Jumlah</label>
-					<input name="jumlah" id="jumlah" type="number" min="0" class="form-control" placeholder="Jumlah">
-				</div>																	
-			</div>
+					<label for="jumlah" class="form-label">Jumlah</label>
+					<input name="jumlah" id="jumlah" type="number" min="0" class="form-control" placeholder="Jumlah" required>
+					<div class="invalid-feedback">Jumlah belum diisi.</div>
+				</div>
+			<!-- </div> -->
 			<div class="">
 				<?php
 				if(isset($_POST['namaBarang'])){
@@ -257,6 +279,7 @@ while($q=mysqli_fetch_array($periksa)){
 					$query = mysqli_query($koneksi, "select * from barang where nama like '$namaBarang%' or jenis like '$namaBarang%' order by nama");
 					$cek2 = mysqli_num_rows($query);
 					if($cek2 > 0){
+						// sudah ada data yang sama
 						echo '
 						<script>
 						$(document).ready(function(){
@@ -264,65 +287,54 @@ while($q=mysqli_fetch_array($periksa)){
 							retriveData()
 						});
 						</script>
-						<div class="px-3 text-danger">Sudah ada data barang dengan nama ini, silahkan periksa kembali data anda.</div>
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+							<label class="form-check-label" for="invalidCheck">Nama barang adalah nama baru dan belum pernah dikirim sebelumnya.</label>
+							<div class="invalid-feedback">Kotak ini harus dicentang.</div>
+						</div>
+						</div>
 						<div class="modal-footer">
 							<input type="reset" class="buttonku-1" value="Reset">
-							<input type="submit" value="Cek Data" name="cek_data" class="btn btn-dark" onclick="cekData()">
+							<input type="submit" value="Kirim" name="cek_data" class="btn btn-primary" onclick="cekData()">
 						</div>
 						';
 					}else{
+						$jenisBarang = $_POST['jenisBarang'];
+						$suplier=$_POST['suplier'];
+						$hargaModal=$_POST['hargaModal'];
+						$hargaJual=$_POST['hargaJual'];
+						$jumlah=$_POST['jumlah'];
+						$sisa=$_POST['jumlah'];
+						mysqli_query($koneksi, "insert into barang values('','$namaBarang','$jenisBarang','$suplier','$hargaModal','$hargaJual','$jumlah','$sisa')");
+						global $namaBarang;
+						unset($namaBarang);
+						$namaBarang = null;
 						echo '
 						<script>
-						$(document).ready(function(){
-							if (localStorage.getItem("namaBarang").length !== 0){
-								$("#myModal").modal("show");
-								retriveData()
-							}
-							else{
-								$("#myModal").modal("hide");
-							}
-						});
-						</script>
-						<div class="px-3 text-success">Belum ada data dengan nama ini, silahkan klik Tambah Barang</div>
-						<div class="modal-footer">
-							<input type="reset" class="buttonku-1" value="Reset">
-							<input type="submit" name="submit" value="Tambah Barang" class="btn btn-primary">
-						</div>
-						';
-						if(isset($_POST['submit'])){
-							$jenisBarang = $_POST['jenisBarang'];
-							$suplier=$_POST['suplier'];
-							$hargaModal=$_POST['hargaModal'];
-							$hargaJual=$_POST['hargaJual'];
-							$jumlah=$_POST['jumlah'];
-							$sisa=$_POST['jumlah'];
-							mysqli_query($koneksi, "insert into barang values('','$namaBarang','$jenisBarang','$suplier','$hargaModal','$hargaJual','$jumlah','$sisa')");
-							global $namaBarang;
-							unset($namaBarang);
-							$namaBarang = null;
-							echo '
-							<script>
-								$("#myModal").modal("hide");
-								localStorage.removeItem("namaBarang");
-								localStorage.removeItem("jenisBarang");
-								localStorage.removeItem("suplier");
-								localStorage.removeItem("hargaModal");
-								localStorage.removeItem("hargaJual");
-								localStorage.removeItem("jumlah");
-								location.load(true);
+							$("#myModal").modal("hide");
+							localStorage.removeItem("namaBarang");
+							localStorage.removeItem("jenisBarang");
+							localStorage.removeItem("suplier");
+							localStorage.removeItem("hargaModal");
+							localStorage.removeItem("hargaJual");
+							localStorage.removeItem("jumlah");
+							window.open("barang.php", "_self")
 							</script>
 							';
-						}
 					}
 				}
 				else{
 					echo '
-					<div class="px-3 text-warning">Silahkan cek data sebelum mengirim data</div>
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+						<label class="form-check-label" for="invalidCheck">Nama barang adalah nama baru dan belum pernah dikirim sebelumnya.</label>
+						<div class="invalid-feedback">Kotak ini harus dicentang.</div>
+					</div>
+					</div>
 					<div class="modal-footer">
 						<input type="reset" class="buttonku-1" value="Reset">
-						<button class="btn btn-dark" onclick="cekData()">Cek Data</button>
-					</div>
-					';
+						<button class="btn btn-primary" onclick="cekData()">Kirim</button>
+						';
 				}
 				?>
 				
@@ -345,26 +357,56 @@ while($q=mysqli_fetch_array($periksa)){
 						hargaJual: document.getElementById("hargaJual").value,
 						jumlah: document.getElementById("jumlah").value
 					}
-					localStorage.setItem("namaBarang", getInputBarang.namaBarang);
-					localStorage.setItem("jenisBarang", getInputBarang.jenisBarang);
-					localStorage.setItem("suplier", getInputBarang.suplier);
-					localStorage.setItem("hargaModal", getInputBarang.hargaModal);
-					localStorage.setItem("hargaJual", getInputBarang.hargaJual);
-					localStorage.setItem("jumlah", getInputBarang.jumlah);
+					function addToLocalStorage(){
+						localStorage.setItem("namaBarang", getInputBarang.namaBarang);
+						localStorage.setItem("jenisBarang", getInputBarang.jenisBarang);
+						localStorage.setItem("suplier", getInputBarang.suplier);
+						localStorage.setItem("hargaModal", getInputBarang.hargaModal);
+						localStorage.setItem("hargaJual", getInputBarang.hargaJual);
+						localStorage.setItem("jumlah", getInputBarang.jumlah);
+						return true;
+					}
 					
-					cacheBarang.namaBarang = localStorage.getItem("namaBarang");
-					cacheBarang.jenisBarang = localStorage.getItem("jenisBarang");
-					cacheBarang.suplier = localStorage.getItem("suplier");
-					cacheBarang.hargaModal = localStorage.getItem("hargaModal");
-					cacheBarang.hargaJual = localStorage.getItem("hargaJual");
-					cacheBarang.jumlah = localStorage.getItem("jumlah");
+					function getFromLocalStorage(){
+						cacheBarang.namaBarang = localStorage.getItem("namaBarang");
+						cacheBarang.jenisBarang = localStorage.getItem("jenisBarang");
+						cacheBarang.suplier = localStorage.getItem("suplier");
+						cacheBarang.hargaModal = localStorage.getItem("hargaModal");
+						cacheBarang.hargaJual = localStorage.getItem("hargaJual");
+						cacheBarang.jumlah = localStorage.getItem("jumlah");
+						return true;
+					}
 					
-					document.getElementById("namaBarang").value = cacheBarang.namaBarang;
-					document.getElementById("jenisBarang").value = cacheBarang.jenisBarang;
-					document.getElementById("suplier").value = cacheBarang.suplier;
-					document.getElementById("hargaModal").value = cacheBarang.hargaModal;
-					document.getElementById("hargaJual").value = cacheBarang.hargaJual;
-					document.getElementById("jumlah").value = cacheBarang.jumlah;
+					function retriveToElement(){
+						document.getElementById("namaBarang").value = cacheBarang.namaBarang;
+						document.getElementById("jenisBarang").value = cacheBarang.jenisBarang;
+						document.getElementById("suplier").value = cacheBarang.suplier;
+						document.getElementById("hargaModal").value = cacheBarang.hargaModal;
+						document.getElementById("hargaJual").value = cacheBarang.hargaJual;
+						document.getElementById("jumlah").value = cacheBarang.jumlah;
+						return true;
+					}
+
+					'use strict'
+
+					// Fetch all the forms we want to apply custom Bootstrap validation styles to
+					const forms = document.querySelectorAll('.needs-validation')
+
+					// Loop over them and prevent submission
+					Array.from(forms).forEach(form => {
+						form.addEventListener('submit', event => {
+							if (!form.checkValidity()) {
+								event.preventDefault()
+								event.stopPropagation()
+							}
+							form.classList.add('was-validated')
+						}, false)
+					})
+					addToLocalStorage()
+					getFromLocalStorage()
+					retriveToElement()
+
+
 					return true;
 				}
 				function retriveData(){
