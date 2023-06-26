@@ -167,12 +167,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 							}
 							?>
 						</select>
-
-					</div>									
-					<div class="form-group">
-						<label>Harga Jual / unit</label>
-						<input name="harga" type="number" min="0" class="form-control" placeholder="Harga" autocomplete="off">
-					</div>	
+					</div>
 					<div class="form-group">
 						<label>Jumlah</label>
 						<input name="jumlah" type="number" min="0" class="form-control" placeholder="Jumlah" autocomplete="off">

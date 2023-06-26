@@ -3,12 +3,13 @@ include 'config.php';
 $koneksi = mysqli_connect('localhost','root','','projectweb');
 $tgl=$_POST['tgl'];
 $nama=$_POST['nama'];
-$harga=$_POST['harga'];
+// $harga=$_POST['harga'];
 $jumlah=$_POST['jumlah'];
 
 $dt=mysqli_query($koneksi, "select * from barang where nama='$nama'");
 $data=mysqli_fetch_array($dt);
 $sisa=$data['jumlah']-$jumlah;
+$harga=$data['harga'];
 mysqli_query($koneksi, "update barang set jumlah='$sisa' where nama='$nama'");
 
 $modal=$data['modal'];
