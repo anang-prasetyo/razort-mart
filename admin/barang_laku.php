@@ -5,8 +5,8 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 <div class="data-barang">
 	<main>
 		<section>
-			<div class="">
-				<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+			<div class="text-center py-4">
+				<nav class="d-flex justify-content-center" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
 					<ol class="breadcrumb">
 						<!-- <li class="breadcrumb-item"><a href="#">Data Barang</a></li> -->
 						<li class="breadcrumb-item active" aria-current="page">Entry Penjualan</li>
@@ -181,10 +181,10 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 						</select>
 
 					</div>									
-					<div class="form-group">
+					<!-- <div class="form-group">
 						<label>Harga Jual / unit</label>
 						<input name="harga" type="number" min="0" class="form-control" placeholder="Harga" autocomplete="off">
-					</div>	
+					</div>	 -->
 					<div class="form-group">
 						<label>Jumlah</label>
 						<input name="jumlah" type="number" min="0" class="form-control" placeholder="Jumlah" autocomplete="off">

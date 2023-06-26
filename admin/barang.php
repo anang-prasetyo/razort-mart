@@ -38,51 +38,6 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 				<button id="btnDesktop" class="d-none d-md-inline-flex buttonku-1 gap-2" onclick=" window.open('lap_barang.php','_blank')"><i class="bi-printer"></i> Cetak</button>
 			</div>
 		</section>
-		
-		<div>
-			<!-- <label>nama barang</label>
-			<form action="barang.php" method="post">
-				<input type="text" name="cek" id="cek">
-				<input type="submit" value="cek" onclick="foo()">
-			</form>
-			<div>hasil : <span id="hasil"></span></div>
-			<div id="demo"></div>
-			<?php
-			if(isset($_POST['cek'])){
-				include 'config.php';
-				$koneksi = mysqli_connect('localhost','root','','projectweb');
-				$cek1 = $_POST['cek'];
-				mysqli_query($koneksi, "insert into cache_barang values('','$cek1', '', '', 0, 0, 0)");
-				// $kirim = mysqli_query($koneksi, "insert into cache_barang values('','$nama','$jenis','$suplier','$modal','$harga','$jumlah','$sisa')");
-				$query=mysqli_query($koneksi, "select * from barang where nama like '$cek1%' or jenis like '$cek1%' order by nama");
-				$cb = mysqli_fetch_array($query);
-				$cek2 = mysqli_num_rows($query);
-				if($cek2 > 0){
-					echo '
-					<div class="text-danger">Sudah ada data dengan nama ini</div>
-					<button type="button" class="btn btn-primary" disabled>Kirim</button>';
-				}else{
-					echo '
-					<div class="text-success">Belum ada data dengan nama ini, silahkan Kirim</div>
-					<button type="button" class="btn btn-primary">Kirim</button>';
-					$no=1;
-					while($cb){
-
-						?>
-						<div>
-							<div><?php echo $no++ ?></div>
-							<div><?php echo $cb['nama_barang'] ?></div>
-						</div>
-						<?php 
-					}
-				}
-			}else{
-				echo '
-				<div class="text-warning">Silahkan cek data sebelum mengirim data</div>
-				<button type="button" class="btn btn-primary" disabled>Kirim</button>';
-			}
-			?> -->
-		</div>
 		<section>
 			<div class="s3" style="overflow: auto;">
 				<?php 
