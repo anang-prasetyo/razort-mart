@@ -17,7 +17,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 				<div>Lakukan edit entry penjualan barang jika ada data yang salah.</div>
 				<hr>
 				<div style="margin: 2rem 0;">
-					<button class="buttonku-1" onclick="window.location.href='barang_laku.php';"><i class="bi-arrow-left"></i> Kembali</button>
+					<button class="buttonku-1" onclick="window.location.href='barang_laku.php';"><i class="bi-arrow-left me-1"></i> Kembali</button>
 				</div>
 			</div>
 		</section>
@@ -33,11 +33,11 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 						<table class="table">
 							<tr>
 								<td style="display: none;"><input type="hidden" name="id" value="<?php echo $d['id'] ?>"></td>
-								<td>Tanggal</td>
+								<td>Tanggal Terjual</td>
 								<td><input name="tgl" type="date" class="form-control" id="tgl" autocomplete="off" value="<?php echo $d['tanggal'] ?>"></td>
 							</tr>
 							<tr>
-								<td>Nama</td>
+								<td>Nama Barang</td>
 								<td>
 									<select class="form-control" name="nama">
 										<?php 
@@ -53,19 +53,19 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 							</tr>		
 
 							<tr>
-								<td>Harga</td>
-								<td><input type="text" class="form-control" name="harga" value="<?php echo $d['harga'] ?>"></td>
+								<td>Harga Barang</td>
+								<td><input type="number" min="0" class="form-control" name="harga" value="<?php echo $d['harga'] ?>"></td>
 							</tr>
 							<tr>
-								<td>Jumlah</td>
-								<td><input type="text" class="form-control" name="jumlah" value="<?php echo $d['jumlah'] ?>"></td>
+								<td>Jumlah Terjual</td>
+								<td><input type="number" min="0" class="form-control" name="jumlah" value="<?php echo $d['jumlah'] ?>"></td>
 							</tr>
 							<tr>
 							<tr>
 								<td></td>
 								<td>
 									<div style="display: flex; gap: 1rem;">
-										<input type="reset" value="Batal" class="buttonku-1">
+										<input type="reset" value="Reset" class="buttonku-1">
 										<input type="submit" class="buttonku-1-primary" value="Simpan Perubahan">
 									</div>
 								</td>

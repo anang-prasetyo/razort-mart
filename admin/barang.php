@@ -41,6 +41,33 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 		<section>
 			<div class="s3" style="overflow: auto;">
 				<?php 
+				$periksa=mysqli_query($koneksi, "select * from barang where jumlah <=3");
+				while($q=mysqli_fetch_array($periksa)){	
+					if($q['jumlah']==0){
+						?>	
+						<script>
+							$(document).ready(function(){
+								$('#pesan_sedia').css("color","red");
+								$('#pesan_sedia').append("<span class='glyphicon glyphicon-asterisk'></span>");
+							});
+						</script>
+						<?php
+						echo "<div style='padding:5px' class='alert alert-danger'><span class='glyphicon glyphicon-info-sign'></span> Stok  <a style='color:red'>". $q['nama'] ."</a> telah HABIS. Silahkan pesan lagi !!</div>";
+					}
+					else if($q['jumlah']<=3){	
+						?>	
+						<script>
+							$(document).ready(function(){
+								$('#pesan_sedia').css("color","red");
+								$('#pesan_sedia').append("<span class='glyphicon glyphicon-asterisk'></span>");
+							});
+						</script>
+						<?php
+						echo "<div style='padding:5px' class='alert alert-warning'><span class='glyphicon glyphicon-info-sign'></span> Stok  <a style='color:red'>". $q['nama'] ."</a> yang tersisa tinggal " . $q['jumlah'] . ". Segera lakukan pembelian produk ini lagi agar tidak kehabisan stock.</div>";	
+					}
+				}
+				?>
+				<?php 
 				$per_hal=20;
 				$jumlah_record=mysqli_query($koneksi, "SELECT COUNT(*) from barang");
 				$jum=mysqli_fetch_array($jumlah_record);
@@ -54,7 +81,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 						<th class="col-md-3">Nama Barang</th>
 						<th class="col-md-2">Jenis Barang</th>
 						<th class="col-md-1 text-end">Harga Beli</th>
-						<th class="col-md-1 text-center">Jumlah</th>
+						<th class="col-md-1 text-center">Stock</th>
 						<th class="col-md-1 text-end">Harga Jual</th>
 						<!-- <th class="col-md-1">Sisa</th>		 -->
 						<th class="col-md-3 text-center">Opsi</th>
@@ -128,22 +155,6 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 			?>						
 		</ul> -->
 <?php 
-$periksa=mysqli_query($koneksi, "select * from barang where jumlah <=3");
-while($q=mysqli_fetch_array($periksa)){	
-	if($q['jumlah']<=3){	
-		?>	
-		<script>
-			$(document).ready(function(){
-				$('#pesan_sedia').css("color","red");
-				$('#pesan_sedia').append("<span class='glyphicon glyphicon-asterisk'></span>");
-			});
-		</script>
-		<?php
-		echo "<div style='padding:5px' class='alert alert-warning'><span class='glyphicon glyphicon-info-sign'></span> Stok  <a style='color:red'>". $q['nama']."</a> yang tersisa sudah kurang dari 3 . silahkan pesan lagi !!</div>";	
-	}
-}
-?>
-<?php 
 // $per_hal=20;
 // $jumlah_record=mysqli_query($koneksi, "SELECT COUNT(*) from barang");
 // $jum=mysqli_fetch_array($jumlah_record);
@@ -172,7 +183,17 @@ while($q=mysqli_fetch_array($periksa)){
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="modalLabelTambahBarang">Tambah Barang Baru</h1>
+				<?php
+				if(isset($_POST['reqToUpdate'])){
+					?>
+					<h1 class="modal-title fs-5" id="modalLabelTambahBarang">Edit Data Barang</h1>
+					<?php
+				}else{
+					?>
+					<h1 class="modal-title fs-5" id="modalLabelTambahBarang">Tambah Barang Baru</h1>
+					<?php
+				}
+				?>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 			<?php
@@ -187,7 +208,9 @@ while($q=mysqli_fetch_array($periksa)){
 					<div id="actionWhenDangerDataBarang" class="p-3" style="display: none; background: rgba(255,0,0,.1)">
 						<div class="text-danger">Nama barang sudah terdaftar, tampilkan dan ubah data barang?</div>
 						<div class="d-flex gap-1 justify-content-center py-2">
-							<button class="btn btn-primary" onclick="getPreviousData()">Ya</button>
+							<form action="barang.php" method="post" class="d-flex flex-column gap-2">
+								<input class="btn btn-primary" type="submit" name="reqToUpdate" value="Ya">
+							</form>
 							<button class="buttonku-1" onclick="toggleDangerDataBarang()">Tidak, saya ingin menambah data baru</button>
 						</div>
 					</div>
@@ -196,74 +219,159 @@ while($q=mysqli_fetch_array($periksa)){
 			}
 			?>
       <div class="modal-body">
-				<form name="formBarang" action="barang.php" method="post" class="d-flex flex-column gap-2 needs-validation" novalidate>
-					<div class="form-group">
-						<label for="namaBarang" class="form-label">Nama Barang</label>
-						<input name="namaBarang" id="namaBarang" type="text" class="form-control" placeholder="Nama Barang .." onkeyup="this.value = this.value.toUpperCase()" required>
-						<div class="invalid-feedback">Nama Barang belum diisi.</div>
-					</div>
-					<div class="form-group">
-						<label for="jenisBarang" class="form-label">Jenis</label>
-						<input name="jenisBarang" id="jenisBarang" type="text" class="form-control" placeholder="Jenis Barang .." onkeyup="this.value = this.value.toUpperCase()" required>
-						<div class="invalid-feedback">Jenis Barang belum diisi.</div>
-					</div>
-					<div class="form-group">
-						<label for="suplier" class="form-label">Suplier</label>
-						<input name="suplier" id="suplier" type="text" class="form-control" placeholder="Suplier .." onkeyup="this.value = this.value.toUpperCase()" required>
-						<div class="invalid-feedback">Suplier belum diisi.</div>
-					</div>
-					<div class="form-group">
-						<label for="hargaModal" class="form-label">Harga Modal</label>
-						<input name="hargaModal" id="hargaModal" type="number" min="0" class="form-control" placeholder="Modal per unit" required>
-						<div class="invalid-feedback">Harga Modal belum diisi.</div>
-					</div>
-					<div class="form-group">
-						<label for="hargaJual" class="form-label">Harga Jual</label>
-						<input name="hargaJual" id="hargaJual" type="number" min="0" class="form-control" placeholder="Harga Jual per unit" required>
-						<div class="invalid-feedback">Harga Jual belum diisi.</div>
-					</div>
-					<div class="form-group">
-						<label for="jumlah" class="form-label">Jumlah</label>
-						<input name="jumlah" id="jumlah" type="number" min="0" class="form-control" placeholder="Jumlah" required>
-						<div class="invalid-feedback">Jumlah belum diisi.</div>
-					</div>
-					<!-- </div> -->
-					<div class="">
-						<?php
-						if(isset($_POST['namaBarang'])){
-							include 'config.php';
-							$namaBarang = $_POST['namaBarang'];
-							$koneksi = mysqli_connect('localhost','root','','projectweb');
+				<?php
+				if(isset($_POST['reqToUpdate'])){
+					?>
+					<script>
+					$(document).ready(function(){
+						$("#modalTambahBarang").modal("show");
+					});
+					</script>
+					<?php
+					$namaBarang = $_SESSION["namaBarang"];
+					$det=mysqli_query($koneksi, "select * from barang where nama='$namaBarang'")or die(mysql_error($koneksi));
+					while($d=mysqli_fetch_array($det)){
+					?>					
+						<form action="update.php" method="post" class="d-flex flex-column gap-2">
+							<div class="form-group">
+								<label for="namaBarang" class="form-label">Nama Barang</label>
+								<input type="hidden" name="id" value="<?php echo $d['id'] ?>">
+								<input name="namaBarang" id="namaBarang" type="text" class="form-control" placeholder="Nama Barang .." onkeyup="this.value = this.value.toUpperCase()" value="<?php echo $d['nama'] ?>" required>
+							</div>
+							<div class="form-group">
+								<label for="jenisBarang" class="form-label">Jenis Barang</label>
+								<input name="jenisBarang" id="jenisBarang" type="text" class="form-control" placeholder="Jenis Barang .." onkeyup="this.value = this.value.toUpperCase()" value="<?php echo $d['jenis'] ?>" required>
+							</div>
+							<div class="form-group">
+								<label for="suplier" class="form-label">Suplier</label>
+								<input name="suplier" id="suplier" type="text" class="form-control" placeholder="Suplier .." onkeyup="this.value = this.value.toUpperCase()" value="<?php echo $d['suplier'] ?>" required>
+							</div>
+							<div class="form-group">
+								<label for="hargaModal" class="form-label">Harga Modal</label>
+								<input name="hargaModal" id="hargaModal" type="number" min="0" class="form-control" placeholder="Harga Modal .." value="<?php echo $d['modal'] ?>" required>
+							</div>
+							<div class="form-group">
+								<label for="hargaJual" class="form-label">Harga Jual</label>
+								<input name="hargaJual" id="hargaJual" type="number" min="0" class="form-control" placeholder="Harga Jual .." value="<?php echo $d['harga'] ?>" required>
+							</div>
+							<div class="form-group">
+								<label for="jumlah" class="form-label">Jumlah</label>
+								<input name="jumlah" id="jumlah" type="number" min="0" class="form-control" placeholder="Harga Modal .." value="<?php echo $d['jumlah'] ?>" required>
+							</div>
+							<div class="modal-footer">
+								<button class="buttonku-1"><a href="barang.php">Kosongkan Form</a></button>
+								<input type="reset" class="buttonku-1" value="Reset">
+								<input type="submit" class="btn btn-primary" value="Simpan Perubahan">
+							</div>
+						</form>
+					<?php 
+					}
+				}
+				else{
+					?>
+					<form name="formBarang" action="barang.php" method="post" class="d-flex flex-column gap-2 needs-validation" novalidate>
+						<div class="form-group">
+							<label for="namaBarang" class="form-label">Nama Barang</label>
+							<input name="namaBarang" id="namaBarang" type="text" class="form-control" placeholder="Nama Barang .." onkeyup="this.value = this.value.toUpperCase()" required>
+							<div class="invalid-feedback">Nama Barang belum diisi.</div>
+						</div>
+						<div class="form-group">
+							<label for="jenisBarang" class="form-label">Jenis</label>
+							<input name="jenisBarang" id="jenisBarang" type="text" class="form-control" placeholder="Jenis Barang .." onkeyup="this.value = this.value.toUpperCase()" required>
+							<div class="invalid-feedback">Jenis Barang belum diisi.</div>
+						</div>
+						<div class="form-group">
+							<label for="suplier" class="form-label">Suplier</label>
+							<input name="suplier" id="suplier" type="text" class="form-control" placeholder="Suplier .." onkeyup="this.value = this.value.toUpperCase()" required>
+							<div class="invalid-feedback">Suplier belum diisi.</div>
+						</div>
+						<div class="form-group">
+							<label for="hargaModal" class="form-label">Harga Modal</label>
+							<input name="hargaModal" id="hargaModal" type="number" min="0" class="form-control" placeholder="Modal per unit" required>
+							<div class="invalid-feedback">Harga Modal belum diisi.</div>
+						</div>
+						<div class="form-group">
+							<label for="hargaJual" class="form-label">Harga Jual</label>
+							<input name="hargaJual" id="hargaJual" type="number" min="0" class="form-control" placeholder="Harga Jual per unit" required>
+							<div class="invalid-feedback">Harga Jual belum diisi.</div>
+						</div>
+						<div class="form-group">
+							<label for="jumlah" class="form-label">Jumlah</label>
+							<input name="jumlah" id="jumlah" type="number" min="0" class="form-control" placeholder="Jumlah" required>
+							<div class="invalid-feedback">Jumlah belum diisi.</div>
+						</div>
+						<!-- </div> -->
+						<div class="">
+							<?php
+							if(isset($_POST['namaBarang'])){
+								$_SESSION["namaBarang"] = $_POST['namaBarang'];
+								
+								include 'config.php';
+								$namaBarang = $_POST['namaBarang'];
+								$koneksi = mysqli_connect('localhost','root','','projectweb');
 
-							$query = mysqli_query($koneksi, "select * from barang where nama like '$namaBarang%' or jenis like '$namaBarang%' order by nama");
-							$cek2 = mysqli_num_rows($query);
-							if($cek2 > 0){
-								// sudah ada data yang sama
-								echo '
-								<script>
-								const isDangerDataBarang = null
-								$(document).ready(function(){
-									$("#modalTambahBarang").modal("show");
-									retriveData()
-									toggleDangerDataBarang()
-								});
-								function toggleDangerDataBarang(){
-									var x = document.getElementById("actionWhenDangerDataBarang");
-									let _namaBrg = localStorage.getItem("namaBarang")
-									if (x.style.display === "none" && _namaBrg.length !== 0) {
-										x.style.display = "block";
-									} else {
-										x.style.display = "none";
+								$query = mysqli_query($koneksi, "select * from barang where nama like '$namaBarang%' or jenis like '$namaBarang%' order by nama");
+								$cek2 = mysqli_num_rows($query);
+								if($cek2 > 0){
+									// sudah ada data yang sama
+									echo '
+									<script>
+									const isDangerDataBarang = null
+									$(document).ready(function(){
+										$("#modalTambahBarang").modal("show");
+										retriveData()
+										toggleDangerDataBarang()
+									});
+									function toggleDangerDataBarang(){
+										var x = document.getElementById("actionWhenDangerDataBarang");
+										let _namaBrg = localStorage.getItem("namaBarang")
+										if (x.style.display === "none" && _namaBrg.length !== 0) {
+											x.style.display = "block";
+										} else {
+											x.style.display = "none";
+										}
 									}
+									function getPreviousData(){
+										resetLocalStorage();
+										resetCacheBarang();
+										localStorage.setItem("reqToUpdate", true);
+										toggleDangerDataBarang();
+										location.reload();
+									}
+									</script>
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+										<label class="form-check-label" for="invalidCheck">Nama barang adalah nama baru dan belum pernah dikirim sebelumnya.</label>
+										<div class="invalid-feedback">Kotak ini harus dicentang.</div>
+									</div>
+									</div>
+									<div class="modal-footer">
+										<input type="reset" class="buttonku-1" value="Reset" onclick="toggleDangerDataBarang()">
+										<input type="submit" value="Kirim" name="cek_data" class="btn btn-primary" onclick="cekData()">
+									</div>
+									';
+								}else{
+									$jenisBarang = $_POST['jenisBarang'];
+									$suplier=$_POST['suplier'];
+									$hargaModal=$_POST['hargaModal'];
+									$hargaJual=$_POST['hargaJual'];
+									$jumlah=$_POST['jumlah'];
+									$sisa=$_POST['jumlah'];
+									mysqli_query($koneksi, "insert into barang values('','$namaBarang','$jenisBarang','$suplier','$hargaModal','$hargaJual','$jumlah','$sisa')");
+									global $namaBarang;
+									unset($namaBarang);
+									$namaBarang = null;
+									echo '
+									<script>
+										$("#modalTambahBarang").modal("hide");
+										resetLocalStorage()
+										window.open("barang.php", "_self")
+									</script>
+									';
 								}
-								function getPreviousData(){
-									resetLocalStorage();
-									resetCacheBarang();
-									localStorage.setItem("reqToUpdate", true);
-									toggleDangerDataBarang();
-									location.reload();
-								}
-								</script>
+							}
+							else{
+								echo '
 								<div class="form-check">
 									<input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
 									<label class="form-check-label" for="invalidCheck">Nama barang adalah nama baru dan belum pernah dikirim sebelumnya.</label>
@@ -271,46 +379,17 @@ while($q=mysqli_fetch_array($periksa)){
 								</div>
 								</div>
 								<div class="modal-footer">
-									<input type="reset" class="buttonku-1" value="Reset" onclick="toggleDangerDataBarang()">
-									<input type="submit" value="Kirim" name="cek_data" class="btn btn-primary" onclick="cekData()">
-								</div>
-								';
-							}else{
-								$jenisBarang = $_POST['jenisBarang'];
-								$suplier=$_POST['suplier'];
-								$hargaModal=$_POST['hargaModal'];
-								$hargaJual=$_POST['hargaJual'];
-								$jumlah=$_POST['jumlah'];
-								$sisa=$_POST['jumlah'];
-								mysqli_query($koneksi, "insert into barang values('','$namaBarang','$jenisBarang','$suplier','$hargaModal','$hargaJual','$jumlah','$sisa')");
-								global $namaBarang;
-								unset($namaBarang);
-								$namaBarang = null;
-								echo '
-								<script>
-									$("#modalTambahBarang").modal("hide");
-									resetLocalStorage()
-									window.open("barang.php", "_self")
-									</script>
+									<input type="reset" class="buttonku-1" value="Reset">
+									<button class="btn btn-primary" onclick="cekData()">Kirim</button>
 									';
 							}
-						}
-						else{
-							echo '
-							<div class="form-check">
-								<input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
-								<label class="form-check-label" for="invalidCheck">Nama barang adalah nama baru dan belum pernah dikirim sebelumnya.</label>
-								<div class="invalid-feedback">Kotak ini harus dicentang.</div>
-							</div>
-							</div>
-							<div class="modal-footer">
-								<input type="reset" class="buttonku-1" value="Reset">
-								<button class="btn btn-primary" onclick="cekData()">Kirim</button>
-								';
-						}
-						?>
-					</div>
-				</form>
+							?>
+						</div>
+					</form>
+					<?php
+				}
+				?>
+
     </div>
   </div>
 </div>

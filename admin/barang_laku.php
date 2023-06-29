@@ -71,7 +71,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 						<th>Tanggal</th>
 						<th>Nama Barang</th>
 						<th class="text-end">Harga Jual</th>
-						<th class="text-end">Jumlah</th>						
+						<th class="text-end">Terjual (pcs)</th>						
 						<th class="text-end">Total Harga</th>
 						<th class="text-center">Opsi</th>
 					</tr>
@@ -161,15 +161,16 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-				<form action="barang_laku_act.php" method="post" class="d-flex flex-column gap-2">
+				<form name="formBarangLaku" action="barang_laku_act.php" method="post" class="d-flex flex-column gap-2 needs-validation" novalidate>
 					<div class="form-group">
 						<label>Tanggal</label>
-						<input name="tgl" type="date" class="form-control" id="tgl" autocomplete="off">
+						<input name="tgl" type="date" class="form-control" id="tgl" autocomplete="off" required>
+						<div class="invalid-feedback">Tanggal belum diisi.</div>
 					</div>	
 					<div class="form-group">
 						<label>Nama Barang</label>								
-						<select class="form-control" name="nama">
-							<option selected disabled hidden>Pilih Nama Barang ..</option>
+						<select class="form-control" name="nama" required>
+							<option value="">Pilih Nama Barang ..</option>
 							<?php 
 							$brg=mysqli_query($koneksi, "select * from barang order by nama");
 							while($b=mysqli_fetch_array($brg)){
@@ -179,20 +180,44 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 							}
 							?>
 						</select>
+						<div class="invalid-feedback">Nama Barang belum dipilih.</div>
 					</div>
 					<div class="form-group">
-						<label>Jumlah</label>
-						<input name="jumlah" type="number" min="0" class="form-control" placeholder="Jumlah" autocomplete="off">
+						<label>Jumlah Barang Terjual</label>
+						<input name="jumlahLaku" type="number" min="0" class="form-control" placeholder="Jumlah Barang Terjual .." autocomplete="off" required>
+						<div class="invalid-feedback">Jumlah belum diisi.</div>
 					</div>																	
-
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+						<label class="form-check-label" for="invalidCheck">Pastikan jumlah stock barang lebih banyak dari jumlah barang yang terjual.</label>
+						<div class="invalid-feedback">Kotak ini harus dicentang.</div>
+					</div>
 				</div>
 				<div class="modal-footer">
 					<input type="reset" class="buttonku-1" value="Reset">												
-					<input type="submit" class="buttonku-1-primary" value="Tambah Entry Penjualan">
+					<!-- <input type="submit" class="buttonku-1-primary" value="Tambah Entry Penjualan"> -->
+					<button class="buttonku-1-primary" onclick="cekDataBarangLaku()">Tambah Entry Penjualan</button>
 				</div>
 			</form>
     </div>
   </div>
 </div>
+<script>
+	function cekDataBarangLaku(){
+		'use strict'
+		// Fetch all the forms we want to apply custom Bootstrap validation styles to
+		const forms = document.querySelectorAll('.needs-validation')
+		// Loop over them and prevent submission
+		Array.from(forms).forEach(form => {
+			form.addEventListener('submit', event => {
+				if (!form.checkValidity()) {
+					event.preventDefault()
+					event.stopPropagation()
+				}
+				form.classList.add('was-validated')
+			}, false)
+		})
+	}
+</script>
 
 	<?php include 'footer.php'; ?>
