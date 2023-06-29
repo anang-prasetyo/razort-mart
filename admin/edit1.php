@@ -33,15 +33,15 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 						<tr>
 							<td>Nama</td>
 							<td style="display: none;"><input type="hidden" name="id" value="<?php echo $d['id'] ?>"></td>
-							<td><input type="text" class="form-control" name="nama" onkeyup="this.value = this.value.toUpperCase()" required value="<?php echo $d['nama'] ?>"></td>
+							<td><input type="text" class="form-control" name="nama" onkeyup="this.value = this.value.toUpperCase()" required value="<?php echo $d['nama'] ?>"></td>
 						</tr>
 						<tr>
 							<td>Jenis</td>
-							<td><input type="text" class="form-control" name="jenis" onkeyup="this.value = this.value.toUpperCase()" required value="<?php echo $d['jenis'] ?>"></td>
+							<td><input type="text" class="form-control" name="jenis" onkeyup="this.value = this.value.toUpperCase()" required value="<?php echo $d['jenis'] ?>"></td>
 						</tr>
 						<tr>
 							<td>Suplier</td>
-							<td><input type="text" class="form-control" name="suplier" onkeyup="this.value = this.value.toUpperCase()" required value="<?php echo $d['suplier'] ?>"></td>
+							<td><input type="text" class="form-control" name="suplier" onkeyup="this.value = this.value.toUpperCase()" required value="<?php echo $d['suplier'] ?>"></td>
 						</tr>
 						<tr>
 							<td>Modal</td>
@@ -59,7 +59,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 							<td></td>
 							<td>
 								<div style="display: flex; gap: 1rem;">
-									<input type="reset" value="Batal" class="buttonku-1">
+									<input type="reset" value="Reset" class="buttonku-1">
 									<input type="submit" class="buttonku-1-primary" value="Simpan Perubahan">
 								</div>
 							</td>

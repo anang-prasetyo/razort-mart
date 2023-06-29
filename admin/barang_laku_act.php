@@ -21,14 +21,26 @@ if ($sisa > 0){
   header("location:barang_laku.php");
 }
 else{
-  echo '
-  <script>
-  let text = "Stock tidak cukup! Periksa kembali data anda.";
-  alert(text)
-  window.open("barang_laku.php", "_self")
-  localStorage.setItem("tambahPenjualanErrorMsg", text)
-  </script>
-  ';
+  if ($jumlahStock == 0){
+    echo '
+    <script>
+    let text = "Stock ' . $nama . ' telah habis. Silahkan membeli lagi produk tersebut atau periksa kembali data anda.";
+    alert(text)
+    window.open("barang_laku.php", "_self")
+    localStorage.setItem("tambahPenjualanErrorMsg", text)
+    </script>
+    ';
+  }
+  else {
+    echo '
+    <script>
+    let text = "Stock tidak cukup! Tinggal tersisa ' . $jumlahStock . ' barang, sedangkan anda ingin menambahkan ' . $jumlah . ' barang. Silahkan periksa kembali data anda.";
+    alert(text)
+    window.open("barang_laku.php", "_self")
+    localStorage.setItem("tambahPenjualanErrorMsg", text)
+    </script>
+    ';
+  }
 }
 
 

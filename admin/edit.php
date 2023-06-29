@@ -17,7 +17,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 				<div>Lakukan edit data barang jika ada data yang salah.</div>
 				<hr>
 				<div style="margin: 2rem 0;">
-					<button class="buttonku-1" onclick="window.location.href='barang.php';"><i class="bi-arrow-left"></i> Kembali</button>
+					<button class="buttonku-1" onclick="window.location.href='barang.php';"><i class="bi-arrow-left me-2"></i> Kembali</button>
 				</div>
 			</div>
 		</section>
@@ -33,15 +33,15 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 						<tr>
 							<td class="text-black-50">Nama</td>
 							<td style="display: none;"><input type="hidden" name="id" value="<?php echo $d['id'] ?>"></td>
-							<td><input type="text" class="form-control" name="nama" onkeyup="this.value = this.value.toUpperCase()" required value="<?php echo $d['nama'] ?>"></td>
+							<td><input type="text" class="form-control" name="nama" onkeyup="this.value = this.value.toUpperCase()" required value="<?php echo $d['nama'] ?>"></td>
 						</tr>
 						<tr>
 							<td class="text-black-50">Jenis</td>
-							<td><input type="text" class="form-control" name="jenis" onkeyup="this.value = this.value.toUpperCase()" required value="<?php echo $d['jenis'] ?>"></td>
+							<td><input type="text" class="form-control" name="jenis" onkeyup="this.value = this.value.toUpperCase()" required value="<?php echo $d['jenis'] ?>"></td>
 						</tr>
 						<tr>
 							<td class="text-black-50">Suplier</td>
-							<td><input type="text" class="form-control" name="suplier" onkeyup="this.value = this.value.toUpperCase()" required value="<?php echo $d['suplier'] ?>"></td>
+							<td><input type="text" class="form-control" name="suplier" onkeyup="this.value = this.value.toUpperCase()" required value="<?php echo $d['suplier'] ?>"></td>
 						</tr>
 						<tr>
 							<td class="text-black-50">Modal</td>

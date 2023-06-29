@@ -66,7 +66,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 								<td></td>
 								<td>
 									<div style="display: flex; gap: 1rem;">
-										<input type="reset" value="Batal" class="buttonku-1">
+										<input type="reset" value="Reset" class="buttonku-1">
 										<input type="submit" class="buttonku-1-primary" value="Simpan Perubahan">
 									</div>
 								</td>

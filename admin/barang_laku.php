@@ -161,7 +161,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-				<form name="formBarangLaku" action="barang_laku_act.php" method="post" class="d-flex flex-column gap-2 needs-validation" novalidate>
+				<form name="formBarangLaku" action="barang_laku_act.php" method="post" class="d-flex flex-column gap-3 needs-validation" novalidate>
 					<div class="form-group">
 						<label>Tanggal</label>
 						<input name="tgl" type="date" class="form-control" id="tgl" autocomplete="off" required>

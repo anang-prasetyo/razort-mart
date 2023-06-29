@@ -143,39 +143,6 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 		</section>
 	</main>
 </div>
-<!-- <button style="margin-bottom:20px" data-toggle="modal" data-target="#modalTambahBarang" class="btn btn-info col-md-2"><span class="glyphicon glyphicon-plus"></span>Tambah Barang</button> -->
-
-<!-- <ul class="pagination">			
-			<?php 
-			for($x=1;$x<=$halaman;$x++){
-				?>
-				<li><a href="?page=<?php echo $x ?>"><?php echo $x ?></a></li>
-				<?php
-			}
-			?>						
-		</ul> -->
-<?php 
-// $per_hal=20;
-// $jumlah_record=mysqli_query($koneksi, "SELECT COUNT(*) from barang");
-// $jum=mysqli_fetch_array($jumlah_record);
-// $halaman=ceil($jum['number'] / $per_hal);
-// $page = (isset($_GET['page'])) ? (int)$_GET['page'] : 1;
-// $start = ($page - 1) * $per_hal;
-?>
-<!-- <div class="col-md-12">
-	<table class="col-md-2">
-		<tr>
-			<td></td>		
-			<td></td>
-		</tr>
-		<tr>
-			<td></td>	
-			<td><?php?></td>
-		</tr>
-	</table>
-</div> -->
-
-
 
 
 <!-- modal -->
@@ -204,7 +171,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 				$query = mysqli_query($koneksi, "select * from barang where nama like '$namaBarang%' or jenis like '$namaBarang%' order by nama");
 				$cek2 = mysqli_num_rows($query);
 				if($cek2 > 0){
-					echo '
+					?>
 					<div id="actionWhenDangerDataBarang" class="p-3" style="display: none; background: rgba(255,0,0,.1)">
 						<div class="text-danger">Nama barang sudah terdaftar, tampilkan dan ubah data barang?</div>
 						<div class="d-flex gap-1 justify-content-center py-2">
@@ -214,7 +181,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 							<button class="buttonku-1" onclick="toggleDangerDataBarang()">Tidak, saya ingin menambah data baru</button>
 						</div>
 					</div>
-					';
+					<?php
 				}
 			}
 			?>
@@ -232,7 +199,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 					$det=mysqli_query($koneksi, "select * from barang where nama='$namaBarang'")or die(mysql_error($koneksi));
 					while($d=mysqli_fetch_array($det)){
 					?>					
-						<form action="update.php" method="post" class="d-flex flex-column gap-2">
+						<form action="update.php" method="post" class="d-flex flex-column gap-3">
 							<div class="form-group">
 								<label for="namaBarang" class="form-label">Nama Barang</label>
 								<input type="hidden" name="id" value="<?php echo $d['id'] ?>">
@@ -269,7 +236,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 				}
 				else{
 					?>
-					<form name="formBarang" action="barang.php" method="post" class="d-flex flex-column gap-2 needs-validation" novalidate>
+					<form name="formBarang" action="barang.php" method="post" class="d-flex flex-column gap-3 needs-validation" novalidate>
 						<div class="form-group">
 							<label for="namaBarang" class="form-label">Nama Barang</label>
 							<input name="namaBarang" id="namaBarang" type="text" class="form-control" placeholder="Nama Barang .." onkeyup="this.value = this.value.toUpperCase()" required>
@@ -314,7 +281,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 								$cek2 = mysqli_num_rows($query);
 								if($cek2 > 0){
 									// sudah ada data yang sama
-									echo '
+									?>
 									<script>
 									const isDangerDataBarang = null
 									$(document).ready(function(){
@@ -349,7 +316,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 										<input type="reset" class="buttonku-1" value="Reset" onclick="toggleDangerDataBarang()">
 										<input type="submit" value="Kirim" name="cek_data" class="btn btn-primary" onclick="cekData()">
 									</div>
-									';
+									<?php
 								}else{
 									$jenisBarang = $_POST['jenisBarang'];
 									$suplier=$_POST['suplier'];
@@ -361,17 +328,17 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 									global $namaBarang;
 									unset($namaBarang);
 									$namaBarang = null;
-									echo '
+									?>
 									<script>
 										$("#modalTambahBarang").modal("hide");
 										resetLocalStorage()
 										window.open("barang.php", "_self")
 									</script>
-									';
+									<?php
 								}
 							}
 							else{
-								echo '
+								?>
 								<div class="form-check">
 									<input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
 									<label class="form-check-label" for="invalidCheck">Nama barang adalah nama baru dan belum pernah dikirim sebelumnya.</label>
@@ -381,7 +348,8 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 								<div class="modal-footer">
 									<input type="reset" class="buttonku-1" value="Reset">
 									<button class="btn btn-primary" onclick="cekData()">Kirim</button>
-									';
+								</div>
+								<?php
 							}
 							?>
 						</div>

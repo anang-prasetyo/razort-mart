@@ -17,7 +17,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 				<div>Lakukan edit entry penjualan barang jika ada data yang salah.</div>
 				<hr>
 				<div style="margin: 2rem 0;">
-					<button class="buttonku-1" onclick="window.location.href='barang_laku.php';"><i class="bi-arrow-left me-1"></i> Kembali</button>
+					<button class="buttonku-1" onclick="window.location.href='barang_laku.php';"><i class="bi-arrow-left me-2"></i> Kembali</button>
 				</div>
 			</div>
 		</section>
