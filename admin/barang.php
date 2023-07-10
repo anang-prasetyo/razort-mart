@@ -26,7 +26,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 			</div>
 		</section>
 		<hr>
-		<section class="my-5">
+		<section class="my-3">
 			<div class="d-flex gap-2 gap-md-4 justify-content-center align-content-center">
 				<button id="btnMobile" data-bs-toggle="modal" data-bs-target="#modalTambahBarang" class="d-inline-flex d-md-none buttonku-1-primary"><i class="bi-plus"></i></button>
 				<button id="btnDesktop" data-bs-toggle="modal" data-bs-target="#modalTambahBarang" class="d-none d-md-inline-flex buttonku-1-primary gap-2"><i class="bi-plus"></i> Tambah Barang</button>
@@ -51,8 +51,11 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 								$('#pesan_sedia').append("<span class='glyphicon glyphicon-asterisk'></span>");
 							});
 						</script>
+						<div class='alert alert-danger d-flex align-items-center justify-content-center gap-3 p-2 mb-2'>
+							<div>Stok <a style='color:red'><?php echo $q['nama'] ?></a> telah HABIS. Silahkan pesan lagi !!</div>
+							<a href="edit.php?id=<?php echo $q['id']; ?>" class="buttonku-1">Edit</a>
+						</div>
 						<?php
-						echo "<div style='padding:5px' class='alert alert-danger'><span class='glyphicon glyphicon-info-sign'></span> Stok  <a style='color:red'>". $q['nama'] ."</a> telah HABIS. Silahkan pesan lagi !!</div>";
 					}
 					else if($q['jumlah']<=3){	
 						?>	
@@ -62,8 +65,11 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 								$('#pesan_sedia').append("<span class='glyphicon glyphicon-asterisk'></span>");
 							});
 						</script>
+						<div class='alert alert-warning d-flex align-items-center justify-content-center gap-3 p-2 mb-2'>
+							<div>Stok  <a style='color:red'><?php echo $q['nama'] ?></a> yang tersisa tinggal <?php echo $q['jumlah'] ?>. Segera lakukan pembelian produk ini lagi agar tidak kehabisan stock.</div>
+							<a href="edit.php?id=<?php echo $q['id']; ?>" class="buttonku-1">Edit</a>
+						</div>	
 						<?php
-						echo "<div style='padding:5px' class='alert alert-warning'><span class='glyphicon glyphicon-info-sign'></span> Stok  <a style='color:red'>". $q['nama'] ."</a> yang tersisa tinggal " . $q['jumlah'] . ". Segera lakukan pembelian produk ini lagi agar tidak kehabisan stock.</div>";	
 					}
 				}
 				?>
@@ -75,8 +81,8 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 				$page = (isset($_GET['page'])) ? (int)$_GET['page'] : 1;
 				$start = ($page - 1) * $per_hal;
 				?>
-				<table class="table table-hover">
-					<tr>
+				<table class="table border border-1">
+					<tr style="background: var(--bs-table-hover-bg);">
 						<th class="col-md-1">No</th>
 						<th class="col-md-3">Nama Barang</th>
 						<th class="col-md-2">Jenis Barang</th>
@@ -95,7 +101,6 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 					}
 					$no=1;
 					while($b=mysqli_fetch_array($brg)){
-
 						?>
 						<tr>
 							<td><?php echo $no++ ?></td>

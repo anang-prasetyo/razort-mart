@@ -27,7 +27,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 			</div>
 		</section>
 		<hr>
-		<section class="my-5">
+		<section class="my-3">
 			<div class="d-flex gap-2 gap-md-4 justify-content-center align-content-center">
 				<button id="btnMobile" data-bs-toggle="modal" data-bs-target="#modalTambahUser" class="d-inline-flex d-md-none buttonku-1-primary"><i class="bi-plus"></i></button>
 				<button id="btnDesktop" data-bs-toggle="modal" data-bs-target="#modalTambahUser" class="d-none d-md-inline-flex buttonku-1-primary gap-2"><i class="bi-plus"></i> Tambah User</button>
@@ -46,8 +46,8 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 				$page = (isset($_GET['page'])) ? (int)$_GET['page'] : 1;
 				$start = ($page - 1) * $per_hal;
 				?>
-				<table class="table table-hover">
-					<tr>
+				<table class="table border border-1">
+					<tr style="background: var(--bs-table-hover-bg);">
 						<th class="col-md-1">No</th>
 						<th class="col-md-4">Nama User</th>
 						<th class="col-md-3">Password User</th>

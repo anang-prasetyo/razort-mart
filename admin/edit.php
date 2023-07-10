@@ -6,8 +6,8 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 <div class="edit">
 	<main>
 		<section>
-			<div class="s1">
-				<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+		<div class="text-center py-4">
+				<nav class="d-flex justify-content-center" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item"><a href="barang.php">Data Barang</a></li>
 						<li class="breadcrumb-item active" aria-current="page">Edit Barang</li>
@@ -16,7 +16,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 				<h3>Edit Barang</h3>
 				<div>Lakukan edit data barang jika ada data yang salah.</div>
 				<hr>
-				<div style="margin: 2rem 0;">
+				<div class="d-flex justify-content-center">
 					<button class="buttonku-1" onclick="window.location.href='barang.php';"><i class="bi-arrow-left me-2"></i> Kembali</button>
 				</div>
 			</div>

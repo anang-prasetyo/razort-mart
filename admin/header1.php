@@ -27,11 +27,11 @@
 			</section>
 			<section class="col-auto">
 				<ul class="d-flex align-items-center justify-content-center m-auto p-0">
-					<li id="navKaryawanMenu" class="d-none d-sm-flex gap-1 align-items-center py-2 px-4" onclick="window.location.href='index1.php';">
+					<li id="navKaryawanMenu" class="d-none d-sm-flex gap-1 align-items-center py-2 px-4" onclick="window.location.href='index1.php'">
 						<i class="bi bi-house"></i>
 						<div class="d-none d-lg-inline-flex">Welcome</div>
 					</li>
-					<li id="navKaryawanMenu" class="d-none d-sm-flex gap-1 align-items-center py-2 px-4" onclick="window.location.href='barang1.php';">
+					<li id="navKaryawanMenu" class="d-none d-sm-flex gap-1 align-items-center py-2 px-4" onclick="window.location.href='barang1.php'">
 						<i class="bi bi-archive"></i>
 						<div class="d-none d-lg-inline-flex">Data Barang</div>
 					</li>
@@ -62,43 +62,43 @@
 	</div>
 	
 	<style>
-	#myDIVKaryawan {
-		background-color: white;
-		align-items: center;
-		height: calc(100vh - 3rem);
-		width: 100%;
-		box-shadow: 0px 0px 30px -15px var(--color1-light4);
-	}
+		#myDIVKaryawan {
+			background-color: white;
+			align-items: center;
+			height: calc(100vh - 3rem);
+			width: 100%;
+			box-shadow: 0px 0px 30px -15px var(--color1-light4);
+		}
 	</style>
 
 	<script>
-	function myFunction() {
-		const scrollY = document.documentElement.style.getPropertyValue('--scroll-y');
-		const body = document.body;
-		body.style.top = `-${scrollY}`;
-		body.style.position = 'fixed';
-		body.style.left = '0';
-		body.style.right = '0';
-		var x = document.getElementById("myDIVKaryawan");
-		// var y = document.getElementById("menuIconNav");
-		x.style.position = 'fixed';
-
-		if (x.style.display === "flex") {
-			x.style.display = "none";
+		function myFunction() {
+			const scrollY = document.documentElement.style.getPropertyValue('--scroll-y');
 			const body = document.body;
-			const scrollY = body.style.top;
-			x.style.position = '';
-			// y.style.marginRight = '';
-			body.style.position = '';
-			body.style.top = '';
-			body.style.left = '';
-			body.style.right = '';
-			window.scrollTo(0, parseInt(scrollY || '0') * -1);
-		} else {
-			x.style.display = "flex";
-			// y.style.marginRight = '14.5px';
+			body.style.top = `-${scrollY}`;
+			body.style.position = 'fixed';
+			body.style.left = '0';
+			body.style.right = '0';
+			var x = document.getElementById("myDIVKaryawan");
+			// var y = document.getElementById("menuIconNav");
+			x.style.position = 'fixed';
+
+			if (x.style.display === "flex") {
+				x.style.display = "none";
+				const body = document.body;
+				const scrollY = body.style.top;
+				x.style.position = '';
+				// y.style.marginRight = '';
+				body.style.position = '';
+				body.style.top = '';
+				body.style.left = '';
+				body.style.right = '';
+				window.scrollTo(0, parseInt(scrollY || '0') * -1);
+			} else {
+				x.style.display = "flex";
+				// y.style.marginRight = '14.5px';
+			}
 		}
-	}
 	</script>
 
 	<!-- modal input -->

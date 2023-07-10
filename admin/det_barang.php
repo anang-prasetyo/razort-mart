@@ -17,7 +17,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 				<div>Semua data lengkap mengenai barang yang dipilih akan ditampilkan disini.</div>
 				<hr>
 				<div style="margin: 2rem 0;">
-					<button class="buttonku-1" onclick="window.location.href='barang.php';"><i class="bi-arrow-left"></i> Kembali</button>
+					<button class="buttonku-1" onclick="window.location.href='barang.php';"><i class="bi-arrow-left me-2"></i> Kembali</button>
 				</div>
 			</div>
 		</section>

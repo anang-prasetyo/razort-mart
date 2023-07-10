@@ -44,18 +44,13 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 										$brg=mysqli_query($koneksi, "select * from barang");
 										while($b=mysqli_fetch_array($brg)){
 											?>	
-											<option <?php if($d['nama']==$b['nama']){echo "selected"; } ?> value="<?php echo $b['nama']; ?>"><?php echo $b['nama'] ?></option>
+											<option <?php if($d['nama']==$b['nama']){echo "selected"; } ?> value="<?php echo $b['nama']; ?>"><?php echo $b['nama'].' - '.$b['jumlah'].'('.$b['harga'].')' ?></option>
 											<?php 
 										}
 										?>
 									</select>
 								</td>
 							</tr>		
-
-							<tr>
-								<td>Harga Barang</td>
-								<td><input type="number" min="0" class="form-control" name="harga" value="<?php echo $d['harga'] ?>"></td>
-							</tr>
 							<tr>
 								<td>Jumlah Terjual</td>
 								<td><input type="number" min="0" class="form-control" name="jumlah" value="<?php echo $d['jumlah'] ?>"></td>

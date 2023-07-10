@@ -109,26 +109,26 @@ function myFunction() {
 			<div class="d-none d-sm-flex col-1 col-md-2 p-0 position-fixed">
 				<div class="pt-3">
 					<ul class="list-unstyled">
-						<li class="">
-							<a href="index.php" class="d-flex justify-content-center justify-content-md-start gap-3 py-2 px-md-3 w-100 text-decoration-none text-black align-items-center btn btn-light">
+						<li class="" onclick="localStorage.setItem('menuTab', 'Dashboard')">
+							<a id="menuTab1" href="index.php" class="d-flex justify-content-center justify-content-md-start gap-3 py-2 px-md-3 w-100 text-decoration-none align-items-center btn btn-light rounded-start-0">
 								<i class="bi bi-grid"></i>
 								<div class="d-none d-md-inline-flex">Dashboard</div>
 							</a>
 						</li>
-						<li class="">
-							<a href="barang.php" class="d-flex justify-content-center justify-content-md-start gap-3 py-2 px-md-3 w-100 text-decoration-none text-black align-items-center btn btn-light">
+						<li class="" onclick="localStorage.setItem('menuTab', 'Data Barang')">
+							<a id="menuTab2" href="barang.php" class="d-flex justify-content-center justify-content-md-start gap-3 py-2 px-md-3 w-100 text-decoration-none align-items-center btn btn-light rounded-start-0">
 								<i class="bi bi-archive"></i>
 								<div class="d-none d-md-inline-flex">Data Barang</div>
 							</a>
 						</li>
-						<li class="">
-							<a href="barang_laku.php" class="d-flex justify-content-center justify-content-md-start gap-3 py-2 px-md-3 w-100 text-decoration-none text-black align-items-center btn btn-light">
+						<li class="" onclick="localStorage.setItem('menuTab', 'Entry Penjualan')">
+							<a id="menuTab3" href="barang_laku.php" class="d-flex justify-content-center justify-content-md-start gap-3 py-2 px-md-3 w-100 text-decoration-none align-items-center btn btn-light rounded-start-0">
 								<i class="bi bi-clipboard2-data"></i>
 								<div class="d-none d-md-inline-flex">Entry Penjualan</div>
 							</a>
 						</li>
-						<li class="">
-							<a href="tambah_user.php" class="d-flex justify-content-center justify-content-md-start gap-3 py-2 px-md-3 w-100 text-decoration-none text-black align-items-center btn btn-light">
+						<li class="" onclick="localStorage.setItem('menuTab', 'Tambah User')">
+							<a id="menuTab4" href="tambah_user.php" class="d-flex justify-content-center justify-content-md-start gap-3 py-2 px-md-3 w-100 text-decoration-none align-items-center btn btn-light rounded-start-0">
 								<i class="bi bi-person-add position-relative">
 									<span class="position-absolute top-0 end-100 translate-middle p-1 bg-danger border border-light rounded-circle">
 										<span class="visually-hidden">New alerts</span>
@@ -137,8 +137,8 @@ function myFunction() {
 								<div class="d-none d-md-inline-flex">Tambah User</div>
 							</a>
 						</li>
-						<li class="" onclick="if(confirm('Apakah anda yakin ingin logout ??')){ location.href='logout.php' }">
-							<a class="d-flex justify-content-center justify-content-md-start gap-3 py-2 px-md-3 w-100 text-decoration-none text-black align-items-center btn btn-light">
+						<li class="" onclick="if(localStorage.removeItem('menuTab'), confirm('Apakah anda yakin ingin logout ??')){ location.href='logout.php' }">
+							<a id="menuTab5" class="d-flex justify-content-center justify-content-md-start gap-3 py-2 px-md-3 w-100 text-decoration-none align-items-center btn btn-light rounded-start-0">
 								<i class="bi bi-box-arrow-right"></i>
 								<div class="d-none d-md-inline-flex">Logout</div>
 							</a>
@@ -179,5 +179,38 @@ function myFunction() {
 				</li>
 			</ul>
 		</div>
+		<script>
+			$(document).ready(function(){
+				let awalTab = localStorage.getItem('menuTab')
+				if (!awalTab){
+					localStorage.setItem('menuTab', 'Dashboard')
+				}
+				let thisMenuTab = localStorage.getItem('menuTab')
+				function changeActiveTab(elMenuTab) {
+					elMenuTab.classList.remove('btn-light');
+					elMenuTab.classList.add('btn-dark');
+					// elMenuTab.classList.toggle('btn-dark');
+				}
+				if (thisMenuTab === 'Dashboard'){
+					let elMenuTab = document.getElementById('menuTab1')
+					changeActiveTab(elMenuTab)
+				}
+				else if (thisMenuTab === 'Data Barang'){
+					let elMenuTab = document.getElementById('menuTab2')
+					changeActiveTab(elMenuTab)
+				}
+				else if (thisMenuTab === 'Entry Penjualan'){
+					let elMenuTab = document.getElementById('menuTab3')
+					changeActiveTab(elMenuTab)
+				}
+				else if (thisMenuTab === 'Tambah User'){
+					let elMenuTab = document.getElementById('menuTab4')
+					changeActiveTab(elMenuTab)
+				}
+				else if (thisMenuTab === 'Logout'){
+					localStorage.removeItem('menuTab')
+				}
+			});
+		</script>
 	
 			<div id="mainContent" class="col col-sm-11 col-md-10 pt-3 px-3">

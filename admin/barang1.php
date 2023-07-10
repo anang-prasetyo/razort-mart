@@ -52,8 +52,11 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 								$('#pesan_sedia').append("<span class='glyphicon glyphicon-asterisk'></span>");
 							});
 						</script>
+						<div class='alert alert-danger d-flex align-items-center justify-content-center gap-3 p-2 mb-2'>
+							<div>Stok <a style='color:red'><?php echo $q['nama'] ?></a> telah HABIS. Silahkan pesan lagi !!</div>
+							<a href="edit1.php?id=<?php echo $q['id']; ?>" class="buttonku-1">Edit</a>
+						</div>
 						<?php
-						echo "<div style='padding:5px' class='alert alert-danger'><span class='glyphicon glyphicon-info-sign'></span> Stok  <a style='color:red'>". $q['nama'] ."</a> telah HABIS. Silahkan pesan lagi !!</div>";
 					}
 					else if($q['jumlah']<=3){	
 						?>	
@@ -63,8 +66,11 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 								$('#pesan_sedia').append("<span class='glyphicon glyphicon-asterisk'></span>");
 							});
 						</script>
-						<?php
-						echo "<div style='padding:5px' class='alert alert-warning'><span class='glyphicon glyphicon-info-sign'></span> Stok  <a style='color:red'>". $q['nama'] ."</a> yang tersisa tinggal " . $q['jumlah'] . ". Segera lakukan pembelian produk ini lagi agar tidak kehabisan stock.</div>";	
+						<div class='alert alert-warning d-flex align-items-center justify-content-center gap-3 p-2 mb-2'>
+							<div>Stok  <a style='color:red'><?php echo $q['nama'] ?></a> yang tersisa tinggal <?php echo $q['jumlah'] ?>. Segera lakukan pembelian produk ini lagi agar tidak kehabisan stock.</div>
+							<a href="edit1.php?id=<?php echo $q['id']; ?>" class="buttonku-1">Edit</a>
+						</div>	
+						<?php	
 					}
 				}
 				?>
@@ -76,8 +82,8 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 				$page = (isset($_GET['page'])) ? (int)$_GET['page'] : 1;
 				$start = ($page - 1) * $per_hal;
 				?>
-				<table class="table table-hover">
-					<tr>
+				<table class="table border border-1">
+					<tr style="background: var(--bs-table-hover-bg);">
 						<th class="col-md-1">No</th>
 						<th class="col-md-3">Nama Barang</th>
 						<th class="col-md-2">Jenis Barang</th>
