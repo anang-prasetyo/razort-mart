@@ -104,6 +104,10 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 						$brg=mysqli_query($koneksi, "SELECT * from barang where nama like '$cari%' or jenis like '$cari%' order by nama");
 						$_SESSION['filterDataBarang'] = true;
 						$_SESSION['kwCariDataBarang'] = $cari;
+
+						$jumlah_record = mysqli_query($koneksi, "SELECT COUNT(*) as jum from barang where nama like '$cari%' or jenis like '$cari%' order by nama");
+						$jum = mysqli_fetch_assoc($jumlah_record);
+						$halaman = ceil($jum['jum'] / $per_hal);
 					}else{
 						$brg=mysqli_query($koneksi, "select * from barang order by nama limit $start, $per_hal");
 						$_SESSION['filterDataBarang'] = false;
@@ -142,14 +146,26 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 					<tr>
 						<td colspan="3" class="text-center">Sub Total <?php echo $jum['jum']; ?> items</td>
 							<?php 
-								$x=mysqli_query($koneksi, "select sum(modal * jumlah) as totalKeluar from barang");	
-								$xx=mysqli_fetch_array($x);
-
-								$y=mysqli_query($koneksi, "select sum(jumlah) as jmlhBrg from barang");	
-								$yy=mysqli_fetch_array($y);
-
-								$z=mysqli_query($koneksi, "select sum(harga * jumlah) as profit from barang");	
-								$zz=mysqli_fetch_array($z);
+								if(isset($_GET['cari'])){
+									$x=mysqli_query($koneksi, "SELECT sum(modal * jumlah) as totalKeluar from barang where nama like '$cari%' or jenis like '$cari%' order by nama");	
+									$xx=mysqli_fetch_array($x);
+	
+									$y=mysqli_query($koneksi, "SELECT sum(jumlah) as jmlhBrg from barang where nama like '$cari%' or jenis like '$cari%' order by nama");	
+									$yy=mysqli_fetch_array($y);
+	
+									$z=mysqli_query($koneksi, "SELECT sum(harga * jumlah) as profit from barang where nama like '$cari%' or jenis like '$cari%' order by nama");	
+									$zz=mysqli_fetch_array($z);
+								}
+								else{
+									$x=mysqli_query($koneksi, "SELECT sum(modal * jumlah) as totalKeluar from barang");	
+									$xx=mysqli_fetch_array($x);
+	
+									$y=mysqli_query($koneksi, "SELECT sum(jumlah) as jmlhBrg from barang");	
+									$yy=mysqli_fetch_array($y);
+	
+									$z=mysqli_query($koneksi, "SELECT sum(harga * jumlah) as profit from barang");	
+									$zz=mysqli_fetch_array($z);
+								}
 								echo "
 								<td class='text-end'><b> Rp.". number_format($xx['totalKeluar']).",-</b></td>
 								<td class='text-center'><b>". number_format($yy['jmlhBrg'])."</b></td>
