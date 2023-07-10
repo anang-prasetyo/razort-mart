@@ -34,8 +34,8 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 					<input type="text" class="form-control ps-5" placeholder="Cari barang di sini .." autocomplete='off' aria-describedby="basic-addon1" name="cari">
 					<i class="bi-search position-absolute top-50 translate-middle-y ms-3"></i>
 				</form>
-				<button id="btnMobile" class="d-inline-flex d-md-none buttonku-1" onclick=" window.open('lap_barang1.php','_blank')"><i class="bi-printer"></i></button>
-				<button id="btnDesktop" class="d-none d-md-inline-flex buttonku-1 gap-2" onclick=" window.open('lap_barang1.php','_blank')"><i class="bi-printer"></i> Cetak</button>
+				<button id="btnMobile" class="d-inline-flex d-md-none buttonku-1" onclick="window.open('cetak_barang.php','_blank')"><i class="bi-printer"></i></button>
+				<button id="btnDesktop" class="d-none d-md-inline-flex buttonku-1 gap-2" onclick="window.open('cetak_barang.php','_blank')"><i class="bi-printer"></i> Cetak</button>
 			</div>
 		</section>
 		
@@ -97,8 +97,11 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 					if(isset($_GET['cari'])){
 						$cari=mysqli_real_escape_string($koneksi, $_GET['cari']);
 						$brg=mysqli_query($koneksi, "select * from barang where nama like '$cari%' or jenis like '$cari%' order by nama");
+						$_SESSION['filterDataBarang'] = true;
+						$_SESSION['kwCariDataBarang'] = $cari;
 					}else{
 						$brg=mysqli_query($koneksi, "select * from barang order by nama limit $start, $per_hal");
+						$_SESSION['filterDataBarang'] = false;
 					}
 					$no=1;
 					while($b=mysqli_fetch_array($brg)){
@@ -336,9 +339,14 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 									$namaBarang = null;
 									echo '
 									<script>
-										$("#modalTambahBarangKaryawan").modal("hide");
-										resetLocalStorage()
+										localStorage.removeItem("namaBarang");
+										localStorage.removeItem("jenisBarang");
+										localStorage.removeItem("suplier");
+										localStorage.removeItem("hargaModal");
+										localStorage.removeItem("hargaJual");
+										localStorage.removeItem("jumlah");
 										window.open("barang1.php", "_self")
+										$("#modalTambahBarangKaryawan").modal("hide");
 									</script>
 									';
 								}

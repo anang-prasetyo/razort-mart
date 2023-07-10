@@ -26,20 +26,6 @@ ini_set('display_errors', 0);
 					<button id="btnMobile" data-bs-toggle="modal" data-bs-target="#myModal" class="d-inline-flex d-md-none buttonku-1-primary align-items-center"><i class="bi-plus"></i></button>
 					<button id="btnDesktop" data-bs-toggle="modal" data-bs-target="#myModal" class="d-none d-md-inline-flex buttonku-1-primary align-items-center gap-2"><i class="bi-plus"></i> Tambah Entry Penjualan</button>
 				</div>
-				<!-- <form action="" method="get" class="position-relative">
-					<select type="submit" name="tanggal" class="form-control ps-5 pe-4" onchange="this.form.submit()">
-						<option>Cari entry penjualan berdasar tanggal ..</option>
-						<?php 
-						$pil=mysqli_query($koneksi, "select distinct tanggal from barang_laku order by tanggal desc");
-						while($p=mysqli_fetch_array($pil)){
-							?>
-							<option><?php echo $p['tanggal'] ?></option>
-							<?php
-						}
-						?>
-					</select>
-					<i class="bi-calendar3 position-absolute top-50 translate-middle-y ms-3"></i>
-				</form> -->
 				<div class="d-flex flex-column align-items-center justify-content-center gap-1 border border-1 p-2 rounded-1">
 					<div>Cari entry penjualan berdasarkan tanggal</div>
 					<div class="d-flex align-items-center justify-content-center gap-1">
@@ -76,31 +62,8 @@ ini_set('display_errors', 0);
 				</div>
 
 				<div>
-					<?php
-					if(isset($_GET['dateStart']) && isset($_GET['dateEnd'])){
-						$tanggal=mysqli_real_escape_string($koneksi, $_SESSION['thisDate']);
-						$tg="lap_barang_laku.php?tanggal='$tanggal'";
-						?>
-						<button id="btnMobile" class="d-inline-flex d-md-none buttonku-1" onclick=" window.open('<?php echo $tg ?>','_blank')"><i class="bi-printer"></i></button>
-						<button id="btnDesktop" class="d-none d-md-inline-flex buttonku-1 gap-2" onclick=" window.open('<?php echo $tg ?>','_blank')"><i class="bi-printer"></i> Cetak</button>
-						<?php
-					} 
-					else if(isset($_GET['dateStart']) || isset($_GET['dateEnd'])){
-						$tanggal=mysqli_real_escape_string($koneksi, $_SESSION['thisDate']);
-						$tg="lap_barang_laku.php?tanggal='$tanggal'";
-						?>
-						<button id="btnMobile" class="d-inline-flex d-md-none buttonku-1" onclick=" window.open('<?php echo $tg ?>','_blank')"><i class="bi-printer"></i></button>
-						<button id="btnDesktop" class="d-none d-md-inline-flex buttonku-1 gap-2" onclick=" window.open('<?php echo $tg ?>','_blank')"><i class="bi-printer"></i> Cetak</button>
-						<?php
-					}
-					else{
-						$tg="lap_barang_laku.php";
-						?>
-						<button id="btnMobile" class="d-inline-flex d-md-none buttonku-1 gap-2" onclick=" window.open('<?php echo $tg ?>','_blank')"><i class="bi-printer"></i></button>
-						<button id="btnDesktop" class="d-none d-md-inline-flex buttonku-1 gap-2" onclick=" window.open('<?php echo $tg ?>','_blank')"><i class="bi-printer"></i> Cetak</button>
-						<?php
-					}
-					?>
+					<button id="btnMobile" class="d-inline-flex d-md-none buttonku-1 gap-2" onclick="window.open('cetak_barang_laku.php','_blank')"><i class="bi-printer"></i></button>
+					<button id="btnDesktop" class="d-none d-md-inline-flex buttonku-1 gap-2" onclick="window.open('cetak_barang_laku.php','_blank')"><i class="bi-printer"></i> Cetak</button>
 				</div>
 			</div>
 		</section>
@@ -127,6 +90,17 @@ ini_set('display_errors', 0);
 						</div>
 						';
 					}
+					$per_hal = 10;
+					$jumlah_record = mysqli_query($koneksi, "SELECT COUNT(*) as jum from barang_laku");
+					$jum = mysqli_fetch_assoc($jumlah_record);
+					$halaman = ceil($jum['jum'] / $per_hal);
+					$page = (isset($_GET['page'])) ? (int)$_GET['page'] : 1;
+					$start = ($page - 1) * $per_hal;
+					// echo ' per hal = '.$per_hal;
+					// echo ' jumlah record = '.$jum['jum'];
+					// echo ' halaman = '.$halaman;
+					// echo ' page = '.$page;
+					// echo ' start = '.$start;
 				?>
 
 				<table class="table border border-1">
@@ -146,7 +120,11 @@ ini_set('display_errors', 0);
 						$dateStart = $_SESSION["dateStart"];
 						$dateEnd = $_SESSION["dateEnd"];
 						// $tanggal=mysqli_real_escape_string($koneksi, $_SESSION['thisDate']);
-						$brg=mysqli_query($koneksi, "select * from barang_laku where tanggal between '$dateStart' and '$dateEnd' order by tanggal desc");
+						$brg=mysqli_query($koneksi, "SELECT * from barang_laku where tanggal between '$dateStart' and '$dateEnd' order by tanggal desc limit $start, $per_hal");
+
+						$jumlah_record = mysqli_query($koneksi, "SELECT COUNT(*) as jum from barang_laku where tanggal between '$dateStart' and '$dateEnd'");
+						$jum = mysqli_fetch_assoc($jumlah_record);
+						$halaman = ceil($jum['jum'] / $per_hal);
 					} 
 					else if($_SESSION["dateStart"] || $_SESSION["dateEnd"]){
 						if($_SESSION["dateStart"]){
@@ -160,12 +138,22 @@ ini_set('display_errors', 0);
 						else{
 							$tanggal=mysqli_real_escape_string($koneksi, $_SESSION['thisDate']);
 						}
-						$brg=mysqli_query($koneksi, "select * from barang_laku where tanggal like '$tanggal' order by tanggal desc");
+						$brg=mysqli_query($koneksi, "SELECT * from barang_laku where tanggal like '$tanggal' order by tanggal desc limit $start, $per_hal");
+						
+						$jumlah_record = mysqli_query($koneksi, "SELECT COUNT(*) as jum from barang_laku where tanggal like '$tanggal'");
+						$jum = mysqli_fetch_assoc($jumlah_record);
+						$halaman = ceil($jum['jum'] / $per_hal);
 					}
 					else{
-						$brg=mysqli_query($koneksi, "select * from barang_laku order by tanggal desc");
+						$brg=mysqli_query($koneksi, "select * from barang_laku order by tanggal desc limit $start, $per_hal");
 					}
-					$no=1;
+					if ($page == 1) {
+						$no = $page;
+					}
+					else{
+						$no = $start + 1;
+					}
+					// $no=1;
 					while($b=mysqli_fetch_array($brg)){
 
 					?>
@@ -191,7 +179,7 @@ ini_set('display_errors', 0);
 					}
 					?>
 					<tr>
-						<td colspan="4" class="text-center">Total Pemasukan</td>
+						<td colspan="4" class="text-center">Total Pemasukan <?php echo $jum['jum']; ?> transaksi</td>
 							<?php
 							if($_SESSION['dateStart'] && $_SESSION['dateEnd']){
 								$tanggalStart = $_SESSION['dateStart'];
@@ -239,6 +227,29 @@ ini_set('display_errors', 0);
 						<td></td>
 					</tr>
 				</table>
+				<form action="" method="get" class="d-flex gap-2 justify-content-center pb-2">
+					<span>Halaman</span>
+					<?php
+					foreach( range(1,$halaman) as $item){
+						if ($item == $page){
+							echo 
+							'<div>
+								<input onclick="this.form.submit()" type="radio" name="page" value="'.$item.'" checked>
+								<label for="'.$item.'">'.$item.'</label>
+							</div>
+							';
+						}
+						else{
+							echo 
+							'<div>
+								<input onclick="this.form.submit()" type="radio" name="page" value="'.$item.'">
+								<label for="'.$item.'">'.$item.'</label>
+							</div>
+							';
+						}
+					}
+					?>
+				</form>
 			</div>
 		</section>
 	</main>

@@ -34,8 +34,8 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 					<input type="text" class="form-control ps-5" placeholder="Cari barang di sini .." autocomplete='off' aria-describedby="basic-addon1" name="cari">
 					<i class="bi-search position-absolute top-50 translate-middle-y ms-3"></i>
 				</form>
-				<button id="btnMobile" class="d-inline-flex d-md-none buttonku-1" onclick=" window.open('lap_barang.php','_blank')"><i class="bi-printer"></i></button>
-				<button id="btnDesktop" class="d-none d-md-inline-flex buttonku-1 gap-2" onclick=" window.open('lap_barang.php','_blank')"><i class="bi-printer"></i> Cetak</button>
+				<button id="btnMobile" class="d-inline-flex d-md-none buttonku-1" onclick="window.open('cetak_barang.php','_blank')"><i class="bi-printer"></i></button>
+				<button id="btnDesktop" class="d-none d-md-inline-flex buttonku-1 gap-2" onclick="window.open('cetak_barang.php','_blank')"><i class="bi-printer"></i> Cetak</button>
 			</div>
 		</section>
 		<section>
@@ -73,13 +73,19 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 					}
 				}
 				?>
+				<!-- <button onclick="window.print()">print</button> -->
 				<?php 
-				$per_hal=20;
-				$jumlah_record=mysqli_query($koneksi, "SELECT COUNT(*) from barang");
-				$jum=mysqli_fetch_array($jumlah_record);
-				// $halaman=ceil($jum['number'] / $per_hal);
+				$per_hal = 10;
+				$jumlah_record = mysqli_query($koneksi, "SELECT COUNT(*) as jum from barang");
+				$jum = mysqli_fetch_assoc($jumlah_record);
+				$halaman = ceil($jum['jum'] / $per_hal);
 				$page = (isset($_GET['page'])) ? (int)$_GET['page'] : 1;
 				$start = ($page - 1) * $per_hal;
+				// echo ' per hal = '.$per_hal;
+				// echo ' jumlah record = '.$jum['jum'];
+				// echo ' halaman = '.$halaman;
+				// echo ' page = '.$page;
+				// echo ' start = '.$start;
 				?>
 				<table class="table border border-1">
 					<tr style="background: var(--bs-table-hover-bg);">
@@ -95,11 +101,20 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 					<?php 
 					if(isset($_GET['cari'])){
 						$cari=mysqli_real_escape_string($koneksi, $_GET['cari']);
-						$brg=mysqli_query($koneksi, "select * from barang where nama like '$cari%' or jenis like '$cari%' order by nama");
+						$brg=mysqli_query($koneksi, "SELECT * from barang where nama like '$cari%' or jenis like '$cari%' order by nama");
+						$_SESSION['filterDataBarang'] = true;
+						$_SESSION['kwCariDataBarang'] = $cari;
 					}else{
 						$brg=mysqli_query($koneksi, "select * from barang order by nama limit $start, $per_hal");
+						$_SESSION['filterDataBarang'] = false;
 					}
-					$no=1;
+					if ($page == 1) {
+						$no = $page;
+					}
+					else{
+						$no = $start + 1;
+					}
+					// $no=1;
 					while($b=mysqli_fetch_array($brg)){
 						?>
 						<tr>
@@ -121,11 +136,11 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 								</div>
 							</td>
 						</tr>
-						<?php 
+						<?php
 					}
 					?>
 					<tr>
-						<td colspan="3" class="text-center">Sub Total</td>
+						<td colspan="3" class="text-center">Sub Total <?php echo $jum['jum']; ?> items</td>
 							<?php 
 								$x=mysqli_query($koneksi, "select sum(modal * jumlah) as totalKeluar from barang");	
 								$xx=mysqli_fetch_array($x);
@@ -144,6 +159,29 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 						<td></td>
 					</tr>
 				</table>
+				<form action="" method="get" class="d-flex gap-2 justify-content-center pb-2">
+					<span>Halaman</span>
+					<?php
+					foreach( range(1,$halaman) as $item){
+						if ($item == $page){
+							echo 
+							'<div>
+								<input onclick="this.form.submit()" type="radio" name="page" value="'.$item.'" checked>
+								<label for="'.$item.'">'.$item.'</label>
+							</div>
+							';
+						}
+						else{
+							echo 
+							'<div>
+								<input onclick="this.form.submit()" type="radio" name="page" value="'.$item.'">
+								<label for="'.$item.'">'.$item.'</label>
+							</div>
+							';
+						}
+					}
+					?>
+				</form>
 			</div>
 		</section>
 	</main>
@@ -328,16 +366,24 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 									$hargaModal=$_POST['hargaModal'];
 									$hargaJual=$_POST['hargaJual'];
 									$jumlah=$_POST['jumlah'];
-									$sisa=$_POST['jumlah'];
-									mysqli_query($koneksi, "insert into barang values('','$namaBarang','$jenisBarang','$suplier','$hargaModal','$hargaJual','$jumlah','$sisa')");
+									// $sisa=$_POST['jumlah'];
+									mysqli_query($koneksi, "insert into barang values('','$namaBarang','$jenisBarang','$suplier','$hargaModal','$hargaJual','$jumlah','')");
 									global $namaBarang;
 									unset($namaBarang);
 									$namaBarang = null;
 									?>
 									<script>
-										$("#modalTambahBarang").modal("hide");
-										resetLocalStorage()
+										localStorage.removeItem("namaBarang");
+										localStorage.removeItem("jenisBarang");
+										localStorage.removeItem("suplier");
+										localStorage.removeItem("hargaModal");
+										localStorage.removeItem("hargaJual");
+										localStorage.removeItem("jumlah");
+										console.log('resetLocalStorage');
 										window.open("barang.php", "_self")
+										console.log('open window');
+										$("#modalTambahBarang").modal("hide");
+										console.log('hide modal');
 									</script>
 									<?php
 								}
