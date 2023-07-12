@@ -8,8 +8,9 @@ $suplier=$_POST['suplier'];
 $modal=$_POST['modal'];
 $harga=$_POST['harga'];
 $jumlah=$_POST['jumlah'];
+$sisa=$_POST['jumlah'];
 
-mysqli_query($koneksi, "update barang set nama='$nama', jenis='$jenis', suplier='$suplier', modal='$modal', harga='$harga', jumlah='$jumlah' where id='$id'");
+mysqli_query($koneksi, "update barang set nama='$nama', jenis='$jenis', suplier='$suplier', modal='$modal', harga='$harga', jumlah='$jumlah', sisa='$sisa' where id='$id'");
 header("location:barang1.php");
 
 ?>

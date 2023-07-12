@@ -45,15 +45,15 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 						</tr>
 						<tr>
 							<td>Modal</td>
-							<td><input type="number" min="0" class="form-control" name="modal" value="<?php echo $d['modal'] ?>"></td>
+							<td><input type="number" min="1" class="form-control" name="modal" value="<?php echo $d['modal'] ?>"></td>
 						</tr>
 						<tr>
 							<td>Harga</td>
-							<td><input type="number" min="0" class="form-control" name="harga" value="<?php echo $d['harga'] ?>"></td>
+							<td><input type="number" min="1" class="form-control" name="harga" value="<?php echo $d['harga'] ?>"></td>
 						</tr>
 						<tr>
 							<td>Jumlah</td>
-							<td><input type="number" min="0" class="form-control" name="jumlah" value="<?php echo $d['jumlah'] ?>"></td>
+							<td><input type="number" min="1" class="form-control" name="jumlah" value="<?php echo $d['jumlah'] ?>"></td>
 						</tr>
 						<tr>
 							<td></td>
