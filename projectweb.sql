@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 22 Jun 2023 pada 03.09
--- Versi server: 10.4.28-MariaDB
--- Versi PHP: 8.0.28
+-- Waktu pembuatan: 12 Jul 2023 pada 10.43
+-- Versi server: 10.4.11-MariaDB
+-- Versi PHP: 7.3.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -32,7 +33,7 @@ CREATE TABLE `admin` (
   `uname` varchar(30) NOT NULL,
   `pass` varchar(70) NOT NULL,
   `bagian` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data untuk tabel `admin`
@@ -41,7 +42,8 @@ CREATE TABLE `admin` (
 INSERT INTO `admin` (`id`, `uname`, `pass`, `bagian`) VALUES
 (1, 'ADMIN', 'admin123', 'ADMIN'),
 (2, 'KARYAWAN', 'karyawan123', 'KARYAWAN'),
-(3, 'KARYAWAN 1', 'karyawan456', 'KARYAWAN');
+(3, 'KARYAWAN SATU', 'karyawan456', 'KARYAWAN'),
+(15, 'KARYAWAN DUA', 'kk222', 'KARYAWAN');
 
 -- --------------------------------------------------------
 
@@ -52,7 +54,7 @@ INSERT INTO `admin` (`id`, `uname`, `pass`, `bagian`) VALUES
 CREATE TABLE `admin_akses` (
   `bagian` varchar(15) NOT NULL,
   `akses_id` varchar(15) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -69,24 +71,29 @@ CREATE TABLE `barang` (
   `harga` int(11) NOT NULL,
   `jumlah` int(11) NOT NULL,
   `sisa` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data untuk tabel `barang`
 --
 
 INSERT INTO `barang` (`id`, `nama`, `jenis`, `suplier`, `modal`, `harga`, `jumlah`, `sisa`) VALUES
-(14, 'ROTI UNIBIS', 'MAKANAN RINGAN', 'PT. MAKMUR JAYA', 5000, 6500, 36, 20),
-(17, 'TIM TAM', 'MAKANAN RINGAN', 'PT. SURYA KENCANA', 2000, 6000, 40, 10),
-(19, 'TIC TAC', 'MAKANAN RINGAN', 'PT. SIDO URIP', 2000, 4000, 8, 24),
-(20, 'AQUA', 'MINUMAN', 'PT. DANONE', 1000, 3000, 50, 1000),
-(21, 'CHITATO', 'MAKANAN RINGAN', 'PT. SURYA', 2000, 4000, 40, 900),
-(23, 'DJARUM', 'ROKOK', 'PT. DRAJUM FOUNDATION', 12000, 13000, 50, 1000),
-(24, 'INDOMIE', 'MAKANAN INSTAN', 'PT. INDOFOOD', 2000, 4000, 57, 800),
-(33, 'TARO', 'MAKANAN RINGAN', 'PT. INDOFOOD', 2000, 5000, 32, 40),
+(14, 'ROTI UNIBIS', 'MAKANAN RINGAN', 'PT. MAKMUR JAYA', 5000, 6500, 50, 45),
+(17, 'TIM TAM', 'MAKANAN RINGAN', 'PT. SURYA KENCANA', 2000, 6000, 50, 48),
+(19, 'TIC TAC', 'MAKANAN RINGAN', 'PT. SIDO URIP', 2000, 4000, 50, 48),
+(20, 'AQUA', 'MINUMAN', 'PT. DANONE', 1000, 3000, 50, 46),
+(21, 'CHITATO', 'MAKANAN RINGAN', 'PT. SURYA', 2000, 4000, 50, 45),
+(23, 'DJARUM', 'ROKOK', 'PT. DRAJUM FOUNDATION', 12000, 13000, 50, 40),
+(24, 'INDOMIE', 'MAKANAN INSTAN', 'PT. INDOFOOD', 2000, 4000, 50, 47),
+(33, 'TARO', 'MAKANAN RINGAN', 'PT. INDOFOOD', 2000, 5000, 50, 45),
 (34, 'MIE SEDAP', 'MAKANAN INSTAN', 'PT. MIE SEDAP', 1500, 2500, 50, 50),
-(35, 'ROTI AOKA', 'MAKANAN RINGAN', 'PT. AOKA', 1000, 2000, 30, 30),
-(36, 'BENG BENG', 'MAKANAN RINGAN', 'PT. INDOFOOD', 1500, 3000, 20, 20);
+(35, 'ROTI AOKA', 'MAKANAN RINGAN', 'PT. AOKA', 1000, 2000, 50, 50),
+(36, 'BENG BENG', 'MAKANAN RINGAN', 'PT. INDOFOOD', 1500, 3000, 50, 50),
+(55, 'AICE STROBERI', 'ES KRIM', 'PT. INDOFOOD', 2500, 3000, 11, 0),
+(56, 'AICE MANGGA', 'ES KRIM', 'PT. INDOFOOD', 2500, 3000, 11, 7),
+(66, 'AICE APEL', 'ES KRIM', 'PT. INDOFOOD', 3000, 4000, 11, 2),
+(67, 'AICE ANGGUR', 'ES KRIM', 'PT. INDOFOOD', 2500, 3000, 11, 11),
+(77, 'AICE JAGUNG', 'ES KRIM', 'PT. INDOFOOD', 2500, 3000, 11, 9);
 
 -- --------------------------------------------------------
 
@@ -95,28 +102,42 @@ INSERT INTO `barang` (`id`, `nama`, `jenis`, `suplier`, `modal`, `harga`, `jumla
 --
 
 CREATE TABLE `barang_laku` (
-  `id` int(11) NOT NULL,
+  `id` varchar(20) NOT NULL,
   `tanggal` date NOT NULL,
   `nama` text NOT NULL,
   `jumlah` int(11) NOT NULL,
   `harga` int(11) NOT NULL,
   `total_harga` int(20) NOT NULL,
   `laba` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data untuk tabel `barang_laku`
 --
 
 INSERT INTO `barang_laku` (`id`, `tanggal`, `nama`, `jumlah`, `harga`, `total_harga`, `laba`) VALUES
-(64, '2021-01-09', 'TARO', 5, 5000, 25000, 15000),
-(67, '2021-01-09', 'TIC TAC', 2, 4000, 8000, 4000),
-(70, '2021-01-10', 'TIM TAM', 2, 6000, 12000, 8000),
-(72, '2021-01-12', 'ROTI UNIBIS', 5, 6500, 32500, 7500),
-(73, '2021-01-13', 'TARO', 3, 5000, 15000, 9000),
-(74, '2023-05-01', 'CHITATO', 5, 4000, 20000, 10000),
-(75, '2023-05-02', 'DJARUM', 10, 13000, 130000, 10000),
-(76, '2023-05-02', 'INDOMIE', 3, 5000, 15000, 9000);
+('T01092021-132011', '2021-01-09', 'TIC TAC', 2, 4000, 8000, 4000),
+('T01092021-132111', '2021-01-09', 'TARO', 5, 5000, 25000, 15000),
+('T01102021-132111', '2021-01-10', 'TIM TAM', 2, 6000, 12000, 8000),
+('T01122021-132111', '2021-01-12', 'ROTI UNIBIS', 5, 6500, 32500, 7500),
+('T01132021-132111', '2021-01-13', 'TARO', 3, 5000, 15000, 9000),
+('T05012023-132111', '2023-05-01', 'CHITATO', 5, 4000, 20000, 10000),
+('T05022023-132011', '2023-05-02', 'INDOMIE', 3, 5000, 15000, 9000),
+('T05022023-132111', '2023-05-02', 'DJARUM', 10, 13000, 130000, 10000),
+('T06252023-132111', '2023-06-25', 'AQUA', 4, 3000, 12000, 8000),
+('T06262023-132011', '2023-06-26', 'AICE APEL', 5, 3500, 17500, 2500),
+('T06262023-132111', '2023-06-26', 'AICE STROBERI', 2, 3000, 6000, 1000),
+('T06292023-131811', '2023-06-29', 'AICE MANGGA', 4, 3000, 12000, 2000),
+('T06292023-131911', '2023-06-29', 'AICE MANGGA', 7, 3000, 21000, 2000),
+('T06292023-132011', '2023-06-29', 'AICE APEL', 4, 3500, 14000, 2000),
+('T06292023-132111', '2023-06-29', 'AICE STROBERI', 3, 3000, 9000, 1500),
+('T07102023-132111', '2023-07-10', 'AICE STROBERI', 2, 3000, 6000, 1000),
+('T07122023-131925', '2023-07-12', 'AICE JAGUNG', 2, 3000, 6000, 1000),
+('T07122023-132111', '2023-07-12', 'AICE STROBERI', 3, 3000, 9000, 1500),
+('T07122023-133557', '2023-07-12', 'AICE STROBERI', 1, 3000, 3000, 500),
+('T07122023-145831', '2023-07-12', 'AICE MANGGA', 1, 3000, 3000, 500),
+('T07122023-145948', '2023-07-12', 'AICE MANGGA', 2, 3000, 6000, 1000),
+('T07122023-153650', '2023-07-12', 'AICE MANGGA', 1, 3000, 3000, 500);
 
 -- --------------------------------------------------------
 
@@ -127,7 +148,7 @@ INSERT INTO `barang_laku` (`id`, `tanggal`, `nama`, `jumlah`, `harga`, `total_ha
 CREATE TABLE `master_akses` (
   `akses_id` varchar(10) NOT NULL,
   `nama` varchar(25) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `master_akses`
@@ -149,7 +170,7 @@ CREATE TABLE `pengeluaran` (
   `keperluan` text NOT NULL,
   `nama` text NOT NULL,
   `jumlah` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data untuk tabel `pengeluaran`
@@ -206,19 +227,13 @@ ALTER TABLE `pengeluaran`
 -- AUTO_INCREMENT untuk tabel `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT untuk tabel `barang`
 --
 ALTER TABLE `barang`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
-
---
--- AUTO_INCREMENT untuk tabel `barang_laku`
---
-ALTER TABLE `barang_laku`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
 
 --
 -- AUTO_INCREMENT untuk tabel `pengeluaran`
