@@ -41,9 +41,9 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 		<section>
 			<div class="s3" style="overflow: auto;">
 				<?php 
-				$periksa=mysqli_query($koneksi, "select * from barang where jumlah <=3");
+				$periksa=mysqli_query($koneksi, "select * from barang where sisa <=3");
 				while($q=mysqli_fetch_array($periksa)){	
-					if($q['jumlah']==0){
+					if($q['sisa']==0){
 						?>	
 						<script>
 							$(document).ready(function(){
@@ -57,7 +57,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 						</div>
 						<?php
 					}
-					else if($q['jumlah']<=3){	
+					else if($q['sisa']<=3){	
 						?>	
 						<script>
 							$(document).ready(function(){
@@ -66,7 +66,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 							});
 						</script>
 						<div class='alert alert-warning d-flex align-items-center justify-content-center gap-3 p-2 mb-2'>
-							<div>Stok  <a style='color:red'><?php echo $q['nama'] ?></a> yang tersisa tinggal <?php echo $q['jumlah'] ?>. Segera lakukan pembelian produk ini lagi agar tidak kehabisan stock.</div>
+							<div>Stok  <a style='color:red'><?php echo $q['nama'] ?></a> yang tersisa tinggal <?php echo $q['sisa'] ?>. Segera lakukan pembelian produk ini lagi agar tidak kehabisan stock.</div>
 							<a href="edit.php?id=<?php echo $q['id']; ?>" class="buttonku-1">Edit</a>
 						</div>	
 						<?php
@@ -78,6 +78,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 				$per_hal = 10;
 				$jumlah_record = mysqli_query($koneksi, "SELECT COUNT(*) as jum from barang");
 				$jum = mysqli_fetch_assoc($jumlah_record);
+				$_SESSION['jum'] = $jum['jum'];
 				$halaman = ceil($jum['jum'] / $per_hal);
 				$page = (isset($_GET['page'])) ? (int)$_GET['page'] : 1;
 				$start = ($page - 1) * $per_hal;
@@ -94,8 +95,8 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 						<th class="col-md-2">Jenis Barang</th>
 						<th class="col-md-1 text-end">Harga Beli</th>
 						<th class="col-md-1 text-center">Stock</th>
+						<th class="col-md-1 text-center">Sisa</th>
 						<th class="col-md-1 text-end">Harga Jual</th>
-						<!-- <th class="col-md-1">Sisa</th>		 -->
 						<th class="col-md-3 text-center">Opsi</th>
 					</tr>
 					<?php 
@@ -107,6 +108,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 
 						$jumlah_record = mysqli_query($koneksi, "SELECT COUNT(*) as jum from barang where nama like '$cari%' or jenis like '$cari%' order by nama");
 						$jum = mysqli_fetch_assoc($jumlah_record);
+						$_SESSION['jum'] = $jum['jum'];
 						$halaman = ceil($jum['jum'] / $per_hal);
 					}else{
 						$brg=mysqli_query($koneksi, "select * from barang order by nama limit $start, $per_hal");
@@ -127,6 +129,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 							<td><?php echo $b['jenis'] ?></td>
 							<td class="text-end">Rp.<?php echo number_format($b['modal']) ?>,-</td>
 							<td class="text-center"><?php echo $b['jumlah'] ?></td>
+							<td class="text-center"><?php echo $b['sisa'] ?></td>
 							<td class="text-end">Rp.<?php echo number_format($b['harga']) ?>,-</td>
 							<td id="rowResponsive" class="text-center">
 								<div class="d-flex justify-content-center align-items-center gap-1">
@@ -152,6 +155,9 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 	
 									$y=mysqli_query($koneksi, "SELECT sum(jumlah) as jmlhBrg from barang where nama like '$cari%' or jenis like '$cari%' order by nama");	
 									$yy=mysqli_fetch_array($y);
+
+									$y2=mysqli_query($koneksi, "SELECT sum(sisa) as jmlhSisa from barang where nama like '$cari%' or jenis like '$cari%' order by nama");	
+									$yy2=mysqli_fetch_array($y2);
 	
 									$z=mysqli_query($koneksi, "SELECT sum(harga * jumlah) as profit from barang where nama like '$cari%' or jenis like '$cari%' order by nama");	
 									$zz=mysqli_fetch_array($z);
@@ -163,12 +169,16 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 									$y=mysqli_query($koneksi, "SELECT sum(jumlah) as jmlhBrg from barang");	
 									$yy=mysqli_fetch_array($y);
 	
+									$y2=mysqli_query($koneksi, "SELECT sum(sisa) as jmlhSisa from barang");	
+									$yy2=mysqli_fetch_array($y2);
+
 									$z=mysqli_query($koneksi, "SELECT sum(harga * jumlah) as profit from barang");	
 									$zz=mysqli_fetch_array($z);
 								}
 								echo "
 								<td class='text-end'><b> Rp.". number_format($xx['totalKeluar']).",-</b></td>
 								<td class='text-center'><b>". number_format($yy['jmlhBrg'])."</b></td>
+								<td class='text-center'><b>". number_format($yy2['jmlhSisa'])."</b></td>
 								<td class='text-end'><b> Rp.". number_format($zz['profit']).",-</b></td>
 								";
 							?>

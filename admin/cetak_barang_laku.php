@@ -20,15 +20,20 @@
 </head>
 <body>
   <div class="container py-3">
-    <h3> Data Barang </h3>
-    <table class="table border border-1">
+    <h3>Data Penjualan Barang <?php
+    if($_SESSION['thisDate']){
+      echo 'Tanggal '.$_SESSION['thisDate']; 
+    } 
+    ?></h3>
+    <table class="table border border-1 mt-3">
       <tr>
-      <th class="col-md-1">No. </th>
-        <th class="col-md-1">Tanggal </th>
-        <th class="col-md-4">Nama Barang</th>
-        <th class="col-md-4">Jumlah Barang</th>
-        <th class="col-md-3">Harga Barang</th>
-        <th class="col-md-1">Total Harga</th>    
+        <th class="">No</th>
+        <th class="">ID Transaksi</th>
+        <th class="">Tanggal </th>
+        <th class="">Nama Barang</th>
+        <th class="text-end">Harga Barang</th>
+        <th class="text-center">Jumlah Barang</th>
+        <th class="text-end">Total Harga</th>    
       </tr>
       <?php
 			if ($_SESSION["dateStart"] && $_SESSION["dateEnd"]){
@@ -56,15 +61,64 @@
         ?>
         <tr>
           <td><?php echo $i++; ?></td>
+          <td><?php echo $row["id"]; ?></td>
           <td><?php echo $row["tanggal"]; ?></td>
           <td><?php echo $row["nama"]; ?></td>
-          <td><?php echo $row["jumlah"]; ?></td>
-          <td><?php echo $row["harga"]; ?></td>
-          <td><?php echo $row["total_harga"]; ?></td>
+          <td class="text-end">Rp. <?php echo number_format($row["harga"]); ?>,-</td>
+          <td class="text-center"><?php echo $row["jumlah"]; ?></td>
+          <td class="text-end">Rp. <?php echo number_format($row["total_harga"]); ?>,-</td>
         </tr>
         <?php
         }
-      ?>
+        ?>
+        <tr>
+          <td colspan="5" class="text-center">Total Pemasukan Dari <?php echo $_SESSION['jum']; ?> Transaksi</td>
+            <?php
+            if($_SESSION['dateStart'] && $_SESSION['dateEnd']){
+              $tanggalStart = $_SESSION['dateStart'];
+              $tanggalEnd = $_SESSION['dateEnd'];
+
+              $x=mysqli_query($koneksi, "select sum(jumlah) as jmlhLaku from barang_laku where tanggal between '$tanggalStart' and '$tanggalEnd'");	
+              $xx=mysqli_fetch_array($x);
+              
+              $y=mysqli_query($koneksi, "select sum(total_harga) as total from barang_laku where tanggal between '$tanggalStart' and '$tanggalEnd'");	
+              $yy=mysqli_fetch_array($y);	
+              echo "
+              <td class='text-center'><b>". number_format($xx['jmlhLaku'])."</b></td>
+              <td class='text-end'><b> Rp.". number_format($yy['total']).",-</b></td>
+              ";
+            } 
+            else if($_SESSION['dateStart'] || $_SESSION['dateEnd']){
+              if($_SESSION['dateStart']){
+                $tanggal = $_SESSION['dateStart'];
+              }
+              else if($_SESSION['dateEnd']){
+                $tanggal = $_SESSION['dateEnd'];
+              }
+              $x=mysqli_query($koneksi, "select sum(jumlah) as jmlhLaku from barang_laku where tanggal='$tanggal'");	
+              $xx=mysqli_fetch_array($x);
+              
+              $y=mysqli_query($koneksi, "select sum(total_harga) as total from barang_laku where tanggal='$tanggal'");	
+              $yy=mysqli_fetch_array($y);	
+              echo "
+              <td class='text-center'><b>". number_format($xx['jmlhLaku'])."</b></td>
+              <td class='text-end'><b> Rp.". number_format($yy['total']).",-</b></td>
+              ";
+            }
+            else{
+              $x=mysqli_query($koneksi, "select sum(jumlah) as jmlhLaku from barang_laku");	
+              $xx=mysqli_fetch_array($x);
+
+              $y=mysqli_query($koneksi, "select sum(total_harga) as total from barang_laku");	
+              $yy=mysqli_fetch_array($y);			
+              echo "
+              <td class='text-center'><b>". number_format($xx['jmlhLaku'])."</b></td>
+              <td class='text-end'><b> Rp.". number_format($yy['total']).",-</b></td>
+              ";
+            }
+            ?>
+          <td></td>
+        </tr>
     </table>
   </div>
   <script>

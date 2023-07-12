@@ -93,6 +93,7 @@ ini_set('display_errors', 0);
 					$per_hal = 10;
 					$jumlah_record = mysqli_query($koneksi, "SELECT COUNT(*) as jum from barang_laku");
 					$jum = mysqli_fetch_assoc($jumlah_record);
+					$_SESSION['jum'] = $jum['jum'];
 					$halaman = ceil($jum['jum'] / $per_hal);
 					$page = (isset($_GET['page'])) ? (int)$_GET['page'] : 1;
 					$start = ($page - 1) * $per_hal;
@@ -106,10 +107,11 @@ ini_set('display_errors', 0);
 				<table class="table border border-1">
 					<tr style="background: var(--bs-table-hover-bg);">
 						<th>No</th>
+						<th>ID Transaksi</th>
 						<th>Tanggal</th>
 						<th>Nama Barang</th>
 						<th class="text-end">Harga Jual</th>
-						<th class="text-end">Terjual (pcs)</th>						
+						<th class="text-center">Terjual (pcs)</th>						
 						<th class="text-end">Total Harga</th>
 						<th class="text-center">Opsi</th>
 					</tr>
@@ -120,10 +122,11 @@ ini_set('display_errors', 0);
 						$dateStart = $_SESSION["dateStart"];
 						$dateEnd = $_SESSION["dateEnd"];
 						// $tanggal=mysqli_real_escape_string($koneksi, $_SESSION['thisDate']);
-						$brg=mysqli_query($koneksi, "SELECT * from barang_laku where tanggal between '$dateStart' and '$dateEnd' order by tanggal desc limit $start, $per_hal");
+						$brg=mysqli_query($koneksi, "SELECT * from barang_laku where tanggal between '$dateStart' and '$dateEnd' order by id desc limit $start, $per_hal");
 
 						$jumlah_record = mysqli_query($koneksi, "SELECT COUNT(*) as jum from barang_laku where tanggal between '$dateStart' and '$dateEnd'");
 						$jum = mysqli_fetch_assoc($jumlah_record);
+						$_SESSION['jum'] = $jum['jum'];
 						$halaman = ceil($jum['jum'] / $per_hal);
 					} 
 					else if($_SESSION["dateStart"] || $_SESSION["dateEnd"]){
@@ -138,14 +141,15 @@ ini_set('display_errors', 0);
 						else{
 							$tanggal=mysqli_real_escape_string($koneksi, $_SESSION['thisDate']);
 						}
-						$brg=mysqli_query($koneksi, "SELECT * from barang_laku where tanggal like '$tanggal' order by tanggal desc limit $start, $per_hal");
+						$brg=mysqli_query($koneksi, "SELECT * from barang_laku where tanggal like '$tanggal' order by id desc limit $start, $per_hal");
 						
 						$jumlah_record = mysqli_query($koneksi, "SELECT COUNT(*) as jum from barang_laku where tanggal like '$tanggal'");
 						$jum = mysqli_fetch_assoc($jumlah_record);
+						$_SESSION['jum'] = $jum['jum'];
 						$halaman = ceil($jum['jum'] / $per_hal);
 					}
 					else{
-						$brg=mysqli_query($koneksi, "select * from barang_laku order by tanggal desc limit $start, $per_hal");
+						$brg=mysqli_query($koneksi, "select * from barang_laku order by id desc limit $start, $per_hal");
 					}
 					if ($page == 1) {
 						$no = $page;
@@ -159,10 +163,11 @@ ini_set('display_errors', 0);
 					?>
 					<tr>
 						<td><?php echo $no++ ?></td>
+						<td><?php echo $b['id'] ?></td>
 						<td><?php echo $b['tanggal'] ?></td>
 						<td><?php echo $b['nama'] ?></td>
 						<td class="text-end">Rp.<?php echo number_format($b['harga']) ?>,-</td>
-						<td class="text-end"><?php echo $b['jumlah'] ?></td>						
+						<td class="text-center"><?php echo $b['jumlah'] ?></td>						
 						<td class="text-end">Rp.<?php echo number_format($b['total_harga']) ?>,-</td>
 						<td id="rowResponsive">
 							<div class="d-flex gap-1 justify-content-center align-items-center">
@@ -179,7 +184,7 @@ ini_set('display_errors', 0);
 					}
 					?>
 					<tr>
-						<td colspan="4" class="text-center">Total Pemasukan <?php echo $jum['jum']; ?> transaksi</td>
+						<td colspan="5" class="text-center">Total Pemasukan Dari <?php echo $jum['jum']; ?> Transaksi</td>
 							<?php
 							if($_SESSION['dateStart'] && $_SESSION['dateEnd']){
 								$tanggalStart = $_SESSION['dateStart'];
@@ -191,7 +196,7 @@ ini_set('display_errors', 0);
 								$y=mysqli_query($koneksi, "select sum(total_harga) as total from barang_laku where tanggal between '$tanggalStart' and '$tanggalEnd'");	
 								$yy=mysqli_fetch_array($y);	
 								echo "
-								<td class='text-end'><b>". number_format($xx['jmlhLaku'])."</b></td>
+								<td class='text-center'><b>". number_format($xx['jmlhLaku'])."</b></td>
 								<td class='text-end'><b> Rp.". number_format($yy['total']).",-</b></td>
 								";
 							} 
@@ -208,7 +213,7 @@ ini_set('display_errors', 0);
 								$y=mysqli_query($koneksi, "select sum(total_harga) as total from barang_laku where tanggal='$tanggal'");	
 								$yy=mysqli_fetch_array($y);	
 								echo "
-								<td class='text-end'><b>". number_format($xx['jmlhLaku'])."</b></td>
+								<td class='text-center'><b>". number_format($xx['jmlhLaku'])."</b></td>
 								<td class='text-end'><b> Rp.". number_format($yy['total']).",-</b></td>
 								";
 							}
@@ -219,7 +224,7 @@ ini_set('display_errors', 0);
 								$y=mysqli_query($koneksi, "select sum(total_harga) as total from barang_laku");	
 								$yy=mysqli_fetch_array($y);			
 								echo "
-								<td class='text-end'><b>". number_format($xx['jmlhLaku'])."</b></td>
+								<td class='text-center'><b>". number_format($xx['jmlhLaku'])."</b></td>
 								<td class='text-end'><b> Rp.". number_format($yy['total']).",-</b></td>
 								";
 							}
@@ -281,7 +286,7 @@ ini_set('display_errors', 0);
 							$brg=mysqli_query($koneksi, "select * from barang order by nama");
 							while($b=mysqli_fetch_array($brg)){
 								?>	
-								<option value="<?php echo $b['nama']; ?>" onchange="document.getElementById('showModalHarga').value = 1000"><?php echo $b['nama'].' - '.$b['jumlah'].'* (Rp. '.$b['harga'].')' ?>
+								<option value="<?php echo $b['nama']; ?>" onchange="document.getElementById('showModalHarga').value = 1000"><?php echo $b['nama'].' - '.$b['sisa'].'* (Rp. '.$b['harga'].')' ?>
 								</option>
 								<?php 
 							}
@@ -296,7 +301,7 @@ ini_set('display_errors', 0);
 					</div>																	
 					<div class="form-check">
 						<input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
-						<label class="form-check-label" for="invalidCheck">Pastikan jumlah stock barang lebih banyak dari jumlah barang yang terjual.</label>
+						<label class="form-check-label" for="invalidCheck">Pastikan jumlah sisa stock barang lebih banyak dari jumlah barang yang terjual.</label>
 						<div class="invalid-feedback">Kotak ini harus dicentang.</div>
 					</div>
 				</div>

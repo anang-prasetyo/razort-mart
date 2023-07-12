@@ -26,7 +26,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 			</div>
 		</section>
 		<hr>
-		<section class="my-5">
+		<section class="my-3">
 			<div class="d-flex gap-2 gap-md-4 justify-content-center align-content-center">
 				<button id="btnMobile" data-bs-toggle="modal" data-bs-target="#modalTambahBarangKaryawan" class="d-inline-flex d-md-none buttonku-1-primary"><i class="bi-plus"></i></button>
 				<button id="btnDesktop" data-bs-toggle="modal" data-bs-target="#modalTambahBarangKaryawan" class="d-none d-md-inline-flex buttonku-1-primary gap-2"><i class="bi-plus"></i> Tambah Barang</button>
@@ -42,9 +42,9 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 		<section>
 			<div class="s3" style="overflow: auto;">
 			<?php 
-				$periksa=mysqli_query($koneksi, "select * from barang where jumlah <=3");
+				$periksa=mysqli_query($koneksi, "select * from barang where sisa <=3");
 				while($q=mysqli_fetch_array($periksa)){	
-					if($q['jumlah']==0){
+					if($q['sisa']==0){
 						?>	
 						<script>
 							$(document).ready(function(){
@@ -58,7 +58,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 						</div>
 						<?php
 					}
-					else if($q['jumlah']<=3){	
+					else if($q['sisa']<=3){	
 						?>	
 						<script>
 							$(document).ready(function(){
@@ -75,10 +75,11 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 				}
 				?>
 				<?php 
-				$per_hal=20;
-				$jumlah_record=mysqli_query($koneksi, "SELECT COUNT(*) from barang");
-				$jum=mysqli_fetch_array($jumlah_record);
-				// $halaman=ceil($jum['number'] / $per_hal);
+				$per_hal = 10;
+				$jumlah_record = mysqli_query($koneksi, "SELECT COUNT(*) as jum from barang");
+				$jum = mysqli_fetch_assoc($jumlah_record);
+				$_SESSION['jum'] = $jum['jum'];
+				$halaman = ceil($jum['jum'] / $per_hal);
 				$page = (isset($_GET['page'])) ? (int)$_GET['page'] : 1;
 				$start = ($page - 1) * $per_hal;
 				?>
@@ -89,21 +90,31 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 						<th class="col-md-2">Jenis Barang</th>
 						<th class="col-md-1 text-end">Harga Beli</th>
 						<th class="col-md-1 text-center">Stock</th>
+						<th class="col-md-1 text-center">Sisa</th>
 						<th class="col-md-1 text-end">Harga Jual</th>
-						<!-- <th class="col-md-1">Sisa</th>		 -->
 						<th class="col-md-3 text-center">Opsi</th>
 					</tr>
 					<?php 
 					if(isset($_GET['cari'])){
 						$cari=mysqli_real_escape_string($koneksi, $_GET['cari']);
-						$brg=mysqli_query($koneksi, "select * from barang where nama like '$cari%' or jenis like '$cari%' order by nama");
+						$brg=mysqli_query($koneksi, "SELECT * from barang where nama like '$cari%' or jenis like '$cari%' order by nama");
 						$_SESSION['filterDataBarang'] = true;
 						$_SESSION['kwCariDataBarang'] = $cari;
+						
+						$jumlah_record = mysqli_query($koneksi, "SELECT COUNT(*) as jum from barang where nama like '$cari%' or jenis like '$cari%' order by nama");
+						$jum = mysqli_fetch_assoc($jumlah_record);
+						$_SESSION['jum'] = $jum['jum'];
+						$halaman = ceil($jum['jum'] / $per_hal);
 					}else{
 						$brg=mysqli_query($koneksi, "select * from barang order by nama limit $start, $per_hal");
 						$_SESSION['filterDataBarang'] = false;
 					}
-					$no=1;
+					if ($page == 1) {
+						$no = $page;
+					}
+					else{
+						$no = $start + 1;
+					}
 					while($b=mysqli_fetch_array($brg)){
 
 						?>
@@ -113,6 +124,7 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 							<td><?php echo $b['jenis'] ?></td>
 							<td class="text-end">Rp.<?php echo number_format($b['modal']) ?>,-</td>
 							<td class="text-center"><?php echo $b['jumlah'] ?></td>
+							<td class="text-center"><?php echo $b['sisa'] ?></td>
 							<td class="text-end">Rp.<?php echo number_format($b['harga']) ?>,-</td>
 							<td id="rowResponsive" class="text-center">
 								<div class="d-flex justify-content-center align-items-center gap-1">
@@ -130,25 +142,67 @@ $koneksi = mysqli_connect('localhost','root','','projectweb');
 					}
 					?>
 					<tr>
-						<td colspan="3" class="text-center">Sub Total</td>
+						<td colspan="3" class="text-center">Sub Total <?php echo $jum['jum']; ?> items</td>
 							<?php 
-								$x=mysqli_query($koneksi, "select sum(modal * jumlah) as totalKeluar from barang");	
-								$xx=mysqli_fetch_array($x);
+								if(isset($_GET['cari'])){
+									$x=mysqli_query($koneksi, "SELECT sum(modal * jumlah) as totalKeluar from barang where nama like '$cari%' or jenis like '$cari%' order by nama");	
+									$xx=mysqli_fetch_array($x);
+	
+									$y=mysqli_query($koneksi, "SELECT sum(jumlah) as jmlhBrg from barang where nama like '$cari%' or jenis like '$cari%' order by nama");	
+									$yy=mysqli_fetch_array($y);
+	
+									$y2=mysqli_query($koneksi, "SELECT sum(sisa) as jmlhSisa from barang where nama like '$cari%' or jenis like '$cari%' order by nama");	
+									$yy2=mysqli_fetch_array($y2);
 
-								$y=mysqli_query($koneksi, "select sum(jumlah) as jmlhBrg from barang");	
-								$yy=mysqli_fetch_array($y);
+									$z=mysqli_query($koneksi, "SELECT sum(harga * jumlah) as profit from barang where nama like '$cari%' or jenis like '$cari%' order by nama");	
+									$zz=mysqli_fetch_array($z);
+								}
+								else{
+									$x=mysqli_query($koneksi, "SELECT sum(modal * jumlah) as totalKeluar from barang");	
+									$xx=mysqli_fetch_array($x);
+	
+									$y=mysqli_query($koneksi, "SELECT sum(jumlah) as jmlhBrg from barang");	
+									$yy=mysqli_fetch_array($y);
+	
+									$y2=mysqli_query($koneksi, "SELECT sum(sisa) as jmlhSisa from barang");	
+									$yy2=mysqli_fetch_array($y2);
 
-								$z=mysqli_query($koneksi, "select sum(harga * jumlah) as profit from barang");	
-								$zz=mysqli_fetch_array($z);
+									$z=mysqli_query($koneksi, "SELECT sum(harga * jumlah) as profit from barang");	
+									$zz=mysqli_fetch_array($z);
+								}
 								echo "
 								<td class='text-end'><b> Rp.". number_format($xx['totalKeluar']).",-</b></td>
 								<td class='text-center'><b>". number_format($yy['jmlhBrg'])."</b></td>
+								<td class='text-center'><b>". number_format($yy2['jmlhSisa'])."</b></td>
 								<td class='text-end'><b> Rp.". number_format($zz['profit']).",-</b></td>
 								";
 							?>
 						<td></td>
 					</tr>
 				</table>
+				<form action="" method="get" class="d-flex gap-2 justify-content-center pb-2">
+					<span>Halaman</span>
+					<?php
+					foreach( range(1,$halaman) as $item){
+						if ($item == $page){
+							echo 
+							'<div>
+								<input onclick="this.form.submit()" type="radio" name="page" value="'.$item.'" checked>
+								<label for="'.$item.'">'.$item.'</label>
+							</div>
+							';
+						}
+						else{
+							echo 
+							'<div>
+								<input onclick="this.form.submit()" type="radio" name="page" value="'.$item.'">
+								<label for="'.$item.'">'.$item.'</label>
+							</div>
+							';
+						}
+					}
+					?>
+				</form>
 			</div>
 		</section>
 	</main>
